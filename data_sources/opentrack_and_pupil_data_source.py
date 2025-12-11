@@ -10,7 +10,7 @@ from misc import Vector
 
 class OpentrackAndPupilDataSource(DataSource):
 
-    def __init__(self):
+    def __init__(self, root_window):
         self.opentrack = Opentrack()
         self.pupil = Pupil()
 

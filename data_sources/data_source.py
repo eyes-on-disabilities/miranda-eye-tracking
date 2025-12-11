@@ -10,7 +10,8 @@ class DataSource(ABC):
 
     @abstractmethod
     def start(self):
-        """Starts the DataSource."""
+        """Starts the DataSource.
+        Takes the root window in case a GUI needs to be displayed."""
         pass
 
     @abstractmethod

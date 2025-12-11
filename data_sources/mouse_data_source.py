@@ -7,6 +7,9 @@ from data_sources.data_source import DataSource
 
 class MouseDataSource(DataSource):
 
+    def __init__(self, root_window):
+        pass
+
     def start(self):
         pass
 

@@ -6,7 +6,7 @@ from data_sources.clients.eyetrackvr import EyeTrackVR
 
 
 class EyeTrackVRDataSource(DataSource):
-    def __init__(self):
+    def __init__(self, root_window):
         self.eyetrackvr = EyeTrackVR()
 
     def start(self):

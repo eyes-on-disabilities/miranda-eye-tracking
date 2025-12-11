@@ -7,7 +7,7 @@ from misc import Vector
 
 class OpentrackDataSource(DataSource):
 
-    def __init__(self):
+    def __init__(self, root_window):
         self.opentrack = Opentrack()
 
     def start(self):

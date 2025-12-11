@@ -66,12 +66,12 @@ monitor = screeninfo.get_monitors()[0]
 last_mouse_position = [monitor.width / 2, monitor.height / 2]
 
 
-def reload_data_source(data_source_key):
+def reload_data_source(data_source_key, root_window):
     global selected_data_source, data_source
     selected_data_source = data_source_key
     if data_source is not None:
         data_source.stop()
-    data_source = data_sources[selected_data_source].clazz()
+    data_source = data_sources[selected_data_source].clazz(root_window)
     data_source.start()
 
 
@@ -329,8 +329,9 @@ def collect_calibration_vectors(
 
 
 main_menu_window = MainMenuWindow()
+root_window = main_menu_window.get_window()
 
-reload_data_source(args.data_source)
+reload_data_source(args.data_source, root_window)
 reload_tracking_approach(args.tracking_approach)
 reload_publisher(args.publisher)
 reload_calibration_result()
@@ -338,7 +339,7 @@ reload_calibration_result()
 main_menu_window.set_data_source_options(data_sources)
 main_menu_window.set_current_data_source(selected_data_source)
 main_menu_window.on_data_source_change_requested(
-    lambda new_data_source: (reload_data_source(new_data_source), reload_calibration_result())
+    lambda new_data_source: (reload_data_source(new_data_source, root_window), reload_calibration_result())
 )
 
 main_menu_window.set_tracking_approach_options(tracking_approaches)
