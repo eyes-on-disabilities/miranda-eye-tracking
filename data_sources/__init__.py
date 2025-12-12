@@ -3,6 +3,7 @@ from data_sources.opentrack_data_source import OpentrackDataSource
 from data_sources.orlosky_data_source import OrloskyDataSource
 from data_sources.pupil_data_source import PupilDataSource
 from data_sources.pye3d_data_source import Pye3dDataSource
+from data_sources.mediapipe_data_source import MediaPipeDataSource
 from guis.tkinter.main_menu_window import MainMenuOption
 from misc import resource_path
 from data_sources.eyetrackvr_data_source import EyeTrackVRDataSource
@@ -50,5 +51,12 @@ data_sources: dict[MainMenuOption] = {
         description="Integrated Eye-Tracking using pye3D.",
         icon=resource_path("assets/data_source_pupil.png"),
         clazz=Pye3dDataSource,
+    ),
+    "mediapipe": MainMenuOption(
+        key="mediapipe",
+        title="MediaPipe",
+        description="Integrated Head-Tracking using MediaPipe.",
+        icon=resource_path("assets/data_source_pupil.png"),
+        clazz=MediaPipeDataSource,
     ),
 }
