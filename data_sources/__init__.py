@@ -47,7 +47,7 @@ data_sources: dict[MainMenuOption] = {
     "pye3d": MainMenuOption(
         key="pye3d",
         title="Pye3d",
-        description="Kek.",
+        description="Integrated Eye-Tracking using pye3D.",
         icon=resource_path("assets/data_source_pupil.png"),
         clazz=Pye3dDataSource,
     ),
