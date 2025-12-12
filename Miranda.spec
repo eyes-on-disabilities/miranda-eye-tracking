@@ -1,7 +1,12 @@
 # -*- mode: python ; coding: utf-8 -*-
-from PyInstaller.utils.hooks import collect_data_files
+from PyInstaller.utils.hooks import collect_submodules, collect_data_files
 
-datas = collect_data_files('assets', includes=['*.png', '*.ico'])
+hiddenimports = []
+hiddenimports += collect_submodules("pye3d")
+hiddenimports += ['PIL._tkinter_finder']
+datas = []
+datas += collect_data_files('pye3d', includes=['refraction_models/*.msgpack'])
+datas += collect_data_files('assets', includes=['*.png', '*.ico'])
 
 a = Analysis(
     ['main.py'],
