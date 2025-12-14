@@ -2,6 +2,7 @@ from publishers.udp_publisher import UdpPublisher
 from misc import resource_path
 from guis.tkinter.main_menu_window import MainMenuOption
 from publishers.mouse_publisher import MousePublisher
+from publishers.tts_keyboard_publisher import TtsKeyboardPublisher
 
 publishers: dict[MainMenuOption] = {
     "udp": MainMenuOption(
@@ -17,5 +18,12 @@ publishers: dict[MainMenuOption] = {
         description="Moves the mouse cursor according to the gaze.\nDoesn't work with the Mouse data source.",
         icon=resource_path("assets/publisher_mouse.png"),
         clazz=MousePublisher,
-    )
+    ),
+    "tts-keyboard": MainMenuOption(
+        key="tts-keyboard",
+        title="TTS Keyboard",
+        description="A text-to-speech-keyboard.",
+        icon=resource_path("assets/publisher_mouse.png"),
+        clazz=TtsKeyboardPublisher,
+    ),
 }

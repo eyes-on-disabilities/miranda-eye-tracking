@@ -86,7 +86,7 @@ def reload_publisher(publisher_key):
     selected_publisher = publisher_key
     if publisher is not None:
         publisher.stop()
-    publisher = publishers[selected_publisher].clazz()
+    publisher = publishers[selected_publisher].clazz(root_window)
     publisher.start()
 
 

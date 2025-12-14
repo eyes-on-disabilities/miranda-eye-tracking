@@ -8,7 +8,7 @@ class MousePublisher(Publisher):
     """Moves the Mouse to the given Vector.
     When the mouse is moved manually this publisher pauses for some time."""
 
-    def __init__(self):
+    def __init__(self, root_window):
         self.manually_moved_to = None
         self.pause_publishing_until = None
         self.pause_time_in_seconds = 1
