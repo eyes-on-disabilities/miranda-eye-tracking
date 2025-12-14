@@ -11,6 +11,10 @@ from tkinter import ttk
 from PIL import Image, ImageTk
 
 
+COLOR_VIOLET = (134, 42, 161)
+COLOR_YELLOW = (0, 237, 254)
+
+
 class HeadTracker:
     @staticmethod
     def detect_cameras(max_cams=10):
@@ -74,11 +78,14 @@ class HeadTracker:
         self.top_bar = ttk.Frame(self.window)
         self.top_bar.pack(side="top", fill="x")
 
-        ttk.Label(self.top_bar, text="Camera:").pack(side="left", padx=(8, 6), pady=8)
+        ttk.Label(self.top_bar, text="Camera:").pack(
+            side="left", padx=(8, 6), pady=8)
 
         self.cam_var = tk.StringVar()
-        self.cam_combo = ttk.Combobox(self.top_bar, state="readonly", textvariable=self.cam_var)
-        self.cam_combo.pack(side="left", fill="x", expand=True, padx=(0, 8), pady=8)
+        self.cam_combo = ttk.Combobox(
+            self.top_bar, state="readonly", textvariable=self.cam_var)
+        self.cam_combo.pack(side="left", fill="x",
+                            expand=True, padx=(0, 8), pady=8)
         self.cam_combo.bind("<<ComboboxSelected>>", self._on_camera_selected)
 
         self.label = tk.Label(self.window)
@@ -243,16 +250,13 @@ class HeadTracker:
                         pt = self._landmark_to_np(lm, w, h)
                         x, y = int(pt[0]), int(pt[1])
                         if 0 <= x < w and 0 <= y < h:
-                            color = (155, 155, 155) if i in self.FACE_OUTLINE_INDICES else (255, 25, 10)
-                            cv2.circle(frame, (x, y), 2, color, -1)
+                            cv2.circle(frame, (x, y), 2, COLOR_VIOLET, -1)
 
                     # key points
                     key_points = {}
                     for name, idx in self.LANDMARKS.items():
                         pt = self._landmark_to_np(face_landmarks[idx], w, h)
                         key_points[name] = pt
-                        x, y = int(pt[0]), int(pt[1])
-                        cv2.circle(frame, (x, y), 4, (0, 0, 0), -1)
 
                     left = key_points["left"]
                     right = key_points["right"]
@@ -284,28 +288,8 @@ class HeadTracker:
                             + z_sign * half_depth * forward_axis
                         )
 
-                    cube_corners = [
-                        corner(-1, 1, -1),
-                        corner(1, 1, -1),
-                        corner(1, -1, -1),
-                        corner(-1, -1, -1),
-                        corner(-1, 1, 1),
-                        corner(1, 1, 1),
-                        corner(1, -1, 1),
-                        corner(-1, -1, 1),
-                    ]
-
                     def project(pt3d):
                         return int(pt3d[0]), int(pt3d[1])
-
-                    cube_corners_2d = [project(pt) for pt in cube_corners]
-                    edges = [
-                        (0, 1), (1, 2), (2, 3), (3, 0),
-                        (4, 5), (5, 6), (6, 7), (7, 4),
-                        (0, 4), (1, 5), (2, 6), (3, 7),
-                    ]
-                    for i, j in edges:
-                        cv2.line(frame, cube_corners_2d[i], cube_corners_2d[j], (255, 125, 35), 2)
 
                     self._ray_origins.append(center)
                     self._ray_directions.append(forward_axis)
@@ -316,15 +300,19 @@ class HeadTracker:
 
                     reference_forward = np.array([0, 0, -1], dtype=np.float32)
 
-                    xz_proj = np.array([avg_direction[0], 0, avg_direction[2]], dtype=np.float32)
+                    xz_proj = np.array(
+                        [avg_direction[0], 0, avg_direction[2]], dtype=np.float32)
                     xz_proj /= (np.linalg.norm(xz_proj) + 1e-8)
-                    yaw_rad = math.acos(float(np.clip(np.dot(reference_forward, xz_proj), -1.0, 1.0)))
+                    yaw_rad = math.acos(
+                        float(np.clip(np.dot(reference_forward, xz_proj), -1.0, 1.0)))
                     if avg_direction[0] < 0:
                         yaw_rad = -yaw_rad
 
-                    yz_proj = np.array([0, avg_direction[1], avg_direction[2]], dtype=np.float32)
+                    yz_proj = np.array(
+                        [0, avg_direction[1], avg_direction[2]], dtype=np.float32)
                     yz_proj /= (np.linalg.norm(yz_proj) + 1e-8)
-                    pitch_rad = math.acos(float(np.clip(np.dot(reference_forward, yz_proj), -1.0, 1.0)))
+                    pitch_rad = math.acos(
+                        float(np.clip(np.dot(reference_forward, yz_proj), -1.0, 1.0)))
                     if avg_direction[1] > 0:
                         pitch_rad = -pitch_rad
 
@@ -341,7 +329,8 @@ class HeadTracker:
 
                     ray_length = 2.5 * half_depth
                     ray_end = avg_origin - avg_direction * ray_length
-                    cv2.line(frame, project(avg_origin), project(ray_end), (15, 255, 0), 3)
+                    cv2.line(frame, project(avg_origin),
+                             project(ray_end), COLOR_YELLOW, 3)
 
                     data = {
                         "timestamp": time.time(),

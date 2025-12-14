@@ -8,6 +8,10 @@ from pupil_detectors import Detector2D
 from pye3d.detector_3d import CameraModel, Detector3D, DetectorMode
 
 
+COLOR_VIOLET = (134, 42, 161)
+COLOR_YELLOW = (0, 237, 254)
+
+
 class EyeTracker:
     @staticmethod
     def detect_cameras(max_cams=10):
@@ -22,8 +26,10 @@ class EyeTracker:
     def __init__(self, root, source=0, focal_length=1000.0, resolution=(640, 480), max_cams=10):
         self.root = root
         self.detector_2d = Detector2D()
-        self.camera = CameraModel(focal_length=focal_length, resolution=list(resolution))
-        self.detector_3d = Detector3D(camera=self.camera, long_term_mode=DetectorMode.blocking)
+        self.camera = CameraModel(
+            focal_length=focal_length, resolution=list(resolution))
+        self.detector_3d = Detector3D(
+            camera=self.camera, long_term_mode=DetectorMode.blocking)
 
         self._video_capture = None
         self._thread = None
@@ -46,11 +52,14 @@ class EyeTracker:
         self.top_bar = ttk.Frame(self.window)
         self.top_bar.pack(side="top", fill="x")
 
-        ttk.Label(self.top_bar, text="Camera:").pack(side="left", padx=(8, 6), pady=8)
+        ttk.Label(self.top_bar, text="Camera:").pack(
+            side="left", padx=(8, 6), pady=8)
 
         self.cam_var = tk.StringVar()
-        self.cam_combo = ttk.Combobox(self.top_bar, state="readonly", textvariable=self.cam_var)
-        self.cam_combo.pack(side="left", fill="x", expand=True, padx=(0, 8), pady=8)
+        self.cam_combo = ttk.Combobox(
+            self.top_bar, state="readonly", textvariable=self.cam_var)
+        self.cam_combo.pack(side="left", fill="x",
+                            expand=True, padx=(0, 8), pady=8)
         self.cam_combo.bind("<<ComboboxSelected>>", self._on_camera_selected)
 
         self.reset_button = ttk.Button(
@@ -222,7 +231,8 @@ class EyeTracker:
                     time.sleep(0.01)
                     continue
 
-                result_2d["timestamp"] = frame_number / fps if fps and fps > 0 else time.time()
+                result_2d["timestamp"] = frame_number / \
+                    fps if fps and fps > 0 else time.time()
                 result_2d["method"] = "2d c++"
 
                 result_3d = self.detector_3d.update_and_detect(result_2d, gray)
@@ -245,7 +255,8 @@ class EyeTracker:
                         ellipse_3d.get("angle", 0.0),
                         0,
                         360,
-                        (0, 255, 0),
+                        COLOR_YELLOW,
+                        thickness=3,
                     )
 
                 if projected_sphere and "center" in projected_sphere and "axes" in projected_sphere:
@@ -256,7 +267,8 @@ class EyeTracker:
                         (ellipse_3d or {}).get("angle", 0.0),
                         0,
                         360,
-                        (255, 0, 0),
+                        COLOR_VIOLET,
+                        thickness=3,
                     )
 
                 with self._lock:
