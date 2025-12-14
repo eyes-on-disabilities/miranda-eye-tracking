@@ -86,7 +86,7 @@ def reload_publisher(publisher_key):
     selected_publisher = publisher_key
     if publisher is not None:
         publisher.stop()
-    publisher = publishers[selected_publisher].clazz()
+    publisher = publishers[selected_publisher].clazz(root_window)
     publisher.start()
 
 
@@ -329,6 +329,7 @@ def collect_calibration_vectors(
 
 
 main_menu_window = MainMenuWindow()
+root_window = main_menu_window.get_window()
 
 reload_data_source(args.data_source)
 reload_tracking_approach(args.tracking_approach)

@@ -111,6 +111,9 @@ class MainMenuWindow:
 
         self.calibration_callback = None
 
+    def get_window(self):
+        return self.window
+
     def set_mouse_point(self, vector: Vector):
         self.unset_mouse_point()
         if vector is not None:

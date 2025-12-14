@@ -9,7 +9,7 @@ from misc import Vector
 class UdpPublisher(Publisher):
     """Pushes the vector as JSON objects over UDP"""
 
-    def __init__(self, host="127.0.0.1", port=9999):
+    def __init__(self, root_window, host="127.0.0.1", port=9999):
         self.sock = None
         self.server_address = (host, port)
 
