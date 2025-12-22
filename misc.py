@@ -1,4 +1,4 @@
-from gtts import gTTS
+import pyttsx3
 import threading
 import tempfile
 import subprocess
@@ -53,31 +53,17 @@ def rotate_yaw_pitch_roll(yaw, pitch, roll):
 class TTS:
     def __init__(self, lang: str = "en"):
         self.lang = lang
+        self.engine = pyttsx3.init()
+
+        # try to select a voice matching the language
+        for voice in self.engine.getProperty("voices"):
+            if self.lang.lower() in voice.id.lower():
+                self.engine.setProperty("voice", voice.id)
+                break
 
     def speak(self, text: str) -> None:
         def _run():
-            fd, path = tempfile.mkstemp(suffix=".mp3")
-            os.close(fd)
-            try:
-                gTTS(text=text, lang=self.lang).save(path)
-
-                if os.name == "nt":
-                    import winsound
-                    winsound.PlaySound(path, winsound.SND_FILENAME)
-                else:
-                    for cmd in (["ffplay", "-nodisp", "-autoexit", "-loglevel", "quiet"],
-                                ["mpg123", "-q"],
-                                ["paplay"],
-                                ["aplay"]):
-                        if shutil.which(cmd[0]):
-                            subprocess.run(cmd + [path], check=True)
-                            break
-                    else:
-                        raise RuntimeError("No audio player found")
-            finally:
-                try:
-                    os.remove(path)
-                except OSError:
-                    pass
+            self.engine.say(text)
+            self.engine.runAndWait()
 
         threading.Thread(target=_run, daemon=True).start()
