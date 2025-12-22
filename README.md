@@ -6,6 +6,14 @@ Miranda is a GUI tool for calibrating eye and head tracker input to match your s
 
 For example, you can use Opentrack as an input source, calibrate your head rotation to your screen, and output the data as UDP messages. This enables you to control applications like OptiKey with your head movements.
 
+## Prerequisites for Linux
+
+On Linux systems, install [espeak-ng](https://github.com/espeak-ng/espeak-ng):
+```
+apt install espeak-ng
+```
+This is not needed for Windows.
+
 ## Run Miranda
 
 Python 3.11.14 is suggested.

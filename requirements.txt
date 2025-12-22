@@ -1,4 +1,7 @@
-pyttsx3==2.99
+pyttsx3==2.91
+# The current version 2.99 has a bug on Windows, where only the first utterance is audible, but the ones after that are not.
+# https://github.com/nateshmbhat/pyttsx3/issues/419
+
 mediapipe==0.10.21
 msgpack==1.1.2
 numpy==1.26.4
