@@ -4,17 +4,26 @@ from data_sources.clients.pupil import Pupil
 from data_sources.data_source import DataSource
 from misc import Vector
 
+import logging
+
 
 class PupilDataSource(DataSource):
     def __init__(self, root_window):
+        self.logger = logging.getLogger(self.__class__.__name__)
         self.pupil = Pupil()
+        self.logger.info("initialized")
 
     def start(self):
         self.pupil.start()
+        self.logger.info("started")
 
     def stop(self):
         self.pupil.stop()
+        self.logger.info("stopped")
 
     def get_next_vector(self) -> Optional[Vector]:
         last_data = self.pupil.get_last_data()["3d"]
-        return (last_data["theta"], last_data["phi"]) if last_data else None
+        next_vector = (last_data["theta"],
+                       last_data["phi"]) if last_data else None
+        self.logger.debug(f"next_vector: {next_vector}")
+        return next_vector

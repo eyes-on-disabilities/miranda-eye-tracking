@@ -20,6 +20,32 @@ from mouse_movement import MouseMovementType
 from publishers import publishers
 from tracking_approaches import tracking_approaches
 
+import logging
+import sys
+
+
+def setup_logging(level: int = logging.INFO) -> None:
+    root = logging.getLogger()
+    root.setLevel(level)
+
+    handler = logging.StreamHandler(sys.stdout)
+    handler.setLevel(level)
+
+    formatter = logging.Formatter(
+        fmt="%(asctime)s.%(msecs)03d %(levelname)s %(name)s: %(message)s",
+        datefmt="%Y-%m-%d %H:%M:%S",
+    )
+    handler.setFormatter(formatter)
+
+    # Avoid duplicate handlers if setup_logging() is called more than once
+    root.handlers.clear()
+    root.addHandler(handler)
+
+
+setup_logging()
+
+
+
 parser = argparse.ArgumentParser()
 parser.add_argument(
     "--data-source",

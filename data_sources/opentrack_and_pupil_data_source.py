@@ -7,20 +7,26 @@ from data_sources.clients.pupil import Pupil
 from data_sources.data_source import DataSource
 from misc import Vector
 
+import logging
+
 
 class OpentrackAndPupilDataSource(DataSource):
 
     def __init__(self, root_window):
+        self.logger = logging.getLogger(self.__class__.__name__)
         self.opentrack = Opentrack()
         self.pupil = Pupil()
+        self.logger.info("initialized")
 
     def start(self):
         self.opentrack.start()
         self.pupil.start()
+        self.logger.info("started")
 
     def stop(self):
         self.opentrack.stop()
         self.pupil.stop()
+        self.logger.info("stopped")
 
     def get_next_vector(self) -> Optional[Vector]:
         """
@@ -72,4 +78,7 @@ class OpentrackAndPupilDataSource(DataSource):
             head_pitch = head["pitch"] * np.pi / 180.0
             print("head", head_yaw, head_pitch)
 
-        return (head_yaw - eye_yaw, -head_pitch - eye_pitch) if eye["3d"] and head else None
+        next_vector = (head_yaw - eye_yaw,
+                       -head_pitch - eye_pitch) if eye["3d"] and head else None
+        self.logger.debug(f"next_vector: {next_vector}")
+        return next_vector

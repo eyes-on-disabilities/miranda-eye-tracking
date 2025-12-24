@@ -4,17 +4,26 @@ from data_sources.clients.mediapipe_lib import HeadTracker
 from data_sources.data_source import DataSource
 from misc import Vector
 
+import logging
+
 
 class MediaPipeDataSource(DataSource):
     def __init__(self, root_window):
+        self.logger = logging.getLogger(self.__class__.__name__)
         self.mediapipe = HeadTracker(root_window)
+        self.logger.info("initialized")
 
     def start(self):
         self.mediapipe.start()
+        self.logger.info("started")
 
     def stop(self):
         self.mediapipe.stop()
+        self.logger.info("stopped")
 
     def get_next_vector(self) -> Optional[Vector]:
         last_data = self.mediapipe.get_latest_data()
-        return (last_data["yaw_deg"], last_data["pitch_deg"]) if last_data else None
+        next_vector = (last_data["yaw_deg"],
+                       last_data["pitch_deg"]) if last_data else None
+        self.logger.debug(f"next_vector: {next_vector}")
+        return next_vector
