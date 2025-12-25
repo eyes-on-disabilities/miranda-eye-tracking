@@ -3,28 +3,34 @@ from misc import Vector
 import pyautogui
 from datetime import datetime, timedelta
 
+import logging
+
 
 class MousePublisher(Publisher):
     """Moves the Mouse to the given Vector.
     When the mouse is moved manually this publisher pauses for some time."""
 
     def __init__(self, root_window):
+        self.logger = logging.getLogger(self.__class__.__name__)
         self.manually_moved_to = None
         self.pause_publishing_until = None
         self.pause_time_in_seconds = 1
 
         self.last_moved_to = None
+        self.logger.info("initialized")
 
     def start(self):
         # Since in our case touching the corners is expected, we deactivate pyautogui's failsafe.
         # see https://pyautogui.readthedocs.io/en/latest/#fail-safes
         pyautogui.FAILSAFE = False
+        self.logger.info("started")
 
     def stop(self):
         pyautogui.FAILSAFE = True
         self.manually_moved_to = None
         self.pause_publishing_until = None
         self.last_moved_to = None
+        self.logger.info("stopped")
 
     def push(self, vector: Vector):
         mouse_position = pyautogui.position()
@@ -41,3 +47,4 @@ class MousePublisher(Publisher):
         else:
             pyautogui.moveTo(*vector, _pause=False)
             self.last_moved_to = pyautogui.position()
+        self.logger.debug(f"pushed vector: {vector}")

@@ -8,6 +8,8 @@ from typing import Callable, Optional, Tuple
 from misc import Vector, TTS
 from publishers.publisher import Publisher
 
+import logging
+
 
 # ----------------------------
 # Config
@@ -146,6 +148,7 @@ class Target:
 
 class TtsKeyboardPublisher(Publisher):
     def __init__(self, root_window):
+        self.logger = logging.getLogger(self.__class__.__name__)
         self.root_window = root_window
         self.window: Optional[tk.Toplevel] = None
         self.canvas: Optional[tk.Canvas] = None
@@ -161,6 +164,7 @@ class TtsKeyboardPublisher(Publisher):
 
         self.targets: list[Target] = []
         self.text_target_key = "text_target"
+        self.logger.info("initialized")
 
     def start(self):
         self.window = tk.Toplevel(self.root_window)
@@ -179,15 +183,21 @@ class TtsKeyboardPublisher(Publisher):
 
         self._build_targets()
         self._start_loop()
+        self.logger.info("started")
 
     def stop(self):
         self._stop_loop()
-        if self.window is not None:
-            self.window.destroy()
+        try:
+            if self.window is not None:
+                self.window.destroy()
+        except tk.TclError:
+            self.logger.warning("Tkinter window was already closed.")
+
         self.window = None
         self.canvas = None
         self.cursor_id = None
         self._abs_rects.clear()
+        self.logger.info("stopped")
 
     def _has_focus(self) -> bool:
         return self.window is not None and self.window.focus_displayof() == self.window
@@ -346,3 +356,4 @@ class TtsKeyboardPublisher(Publisher):
         r = CURSOR_RADIUS
         self.cursor_id = self.canvas.create_oval(
             cx - r, cy - r, cx + r, cy + r, fill=CURSOR_FILL, outline="")
+        self.logger.debug(f"pushed vector: {vector}")

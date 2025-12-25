@@ -7,6 +7,8 @@ from PIL import Image, ImageTk
 from pupil_detectors import Detector2D
 from pye3d.detector_3d import CameraModel, Detector3D, DetectorMode
 
+import logging
+
 
 COLOR_VIOLET = (134, 42, 161)
 COLOR_YELLOW = (0, 237, 254)
@@ -24,6 +26,7 @@ class EyeTracker:
         return available_cameras
 
     def __init__(self, root, source=0, focal_length=1000.0, resolution=(640, 480), max_cams=10):
+        self.logger = logging.getLogger(self.__class__.__name__)
         self.root = root
         self.detector_2d = Detector2D()
         self.camera = CameraModel(
@@ -74,6 +77,7 @@ class EyeTracker:
 
         self._init_camera_selection(source)
         self.root.after(0, self._update_tk_image)
+        self.logger.debug("initialized")
 
     def _reset_eyeball(self):
         try:
@@ -120,20 +124,29 @@ class EyeTracker:
         self._running = True
         self._thread = threading.Thread(target=self._capture_loop, daemon=True)
         self._thread.start()
+        self.logger.debug("started")
 
     def stop(self):
         self._running = False
 
-        thread = self._thread
-        if thread is not None:
-            thread.join()
+        try:
+            thread = self._thread
+            if thread is not None:
+                thread.join()
 
-        if self._video_capture is not None:
-            self._video_capture.release()
-            self._video_capture = None
+            if self._video_capture is not None:
+                self._video_capture.release()
+                self._video_capture = None
 
-        if self.window.winfo_exists():
-            self.window.destroy()
+            if self.window.winfo_exists():
+                self.window.destroy()
+
+        except tk.TclError:
+            self.logger.warning("Tkinter window was already closed.")
+        except Exception:
+            self.logger.exception("")
+
+        self.logger.debug("stopped")
 
     def get_latest_data(self):
         with self._lock:
