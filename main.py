@@ -97,8 +97,13 @@ last_data_source_vector = None
 monitor = screeninfo.get_monitors()[0]
 last_mouse_position = [monitor.width / 2, monitor.height / 2]
 
+logger = logging.getLogger(__name__)
+
+logger.info(f"{config.APP_FULL_NAME} {config.APP_VERSION}")
+
 
 def reload_data_source(data_source_key, root_window):
+    logger.info(f"reload data source: {data_source_key}")
     global selected_data_source, data_source
     selected_data_source = data_source_key
     if data_source is not None:
@@ -108,12 +113,14 @@ def reload_data_source(data_source_key, root_window):
 
 
 def reload_tracking_approach(tracking_approach_key):
+    logger.info(f"reload tracking approach: {tracking_approach_key}")
     global selected_tracking_approach, tracking_approach
     selected_tracking_approach = tracking_approach_key
     tracking_approach = tracking_approaches[selected_tracking_approach].clazz()
 
 
-def reload_publisher(publisher_key):
+def reload_publisher(publisher_key, root_window):
+    logger.info(f"reload publisher: {publisher_key}")
     global selected_publisher, publisher
     selected_publisher = publisher_key
     if publisher is not None:
@@ -123,6 +130,7 @@ def reload_publisher(publisher_key):
 
 
 def reload_calibration_result():
+    logger.info("reload calibration result")
     global selected_data_source, selected_tracking_approach, tracking_approach
     global calibration_result, main_menu_window, last_mouse_position
     calibration_result = None
@@ -365,7 +373,7 @@ root_window = main_menu_window.get_window()
 
 reload_data_source(args.data_source, root_window)
 reload_tracking_approach(args.tracking_approach)
-reload_publisher(args.publisher)
+reload_publisher(args.publisher, root_window)
 reload_calibration_result()
 
 main_menu_window.set_data_source_options(data_sources)
@@ -382,7 +390,9 @@ main_menu_window.on_tracking_approach_change_requested(
 
 main_menu_window.set_publisher_options(publishers)
 main_menu_window.set_current_publisher(selected_publisher)
-main_menu_window.on_publisher_change_requested(reload_publisher)
+main_menu_window.on_publisher_change_requested(
+    lambda new_publisher: reload_publisher(new_publisher, root_window)
+)
 
 main_menu_window.on_calibration_requested(on_calibration_requested)
 
@@ -394,3 +404,4 @@ running = False
 request_loop.join(timeout=1)
 data_source.stop()
 publisher.stop()
+logger.info("bye")
