@@ -24,28 +24,6 @@ import logging
 import sys
 
 
-def setup_logging(level: int = logging.INFO) -> None:
-    root = logging.getLogger()
-    root.setLevel(level)
-
-    handler = logging.StreamHandler(sys.stdout)
-    handler.setLevel(level)
-
-    formatter = logging.Formatter(
-        fmt="%(asctime)s.%(msecs)03d %(levelname)s %(name)s: %(message)s",
-        datefmt="%Y-%m-%d %H:%M:%S",
-    )
-    handler.setFormatter(formatter)
-
-    # Avoid duplicate handlers if setup_logging() is called more than once
-    root.handlers.clear()
-    root.addHandler(handler)
-
-
-setup_logging()
-
-
-
 parser = argparse.ArgumentParser()
 parser.add_argument(
     "--data-source",
@@ -66,8 +44,36 @@ parser.add_argument(
     choices=publishers,
     default=next(iter(publishers)),
 )
+parser.add_argument(
+    "--log-level",
+    help='default="%(default)s"',
+    default="INFO",
+    choices=["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"],
+)
 
 args = parser.parse_args()
+
+
+def setup_logging(args) -> None:
+    level = getattr(logging, args.log_level)
+
+    root = logging.getLogger()
+    root.setLevel(level)
+
+    handler = logging.StreamHandler(sys.stdout)
+    handler.setLevel(level)
+
+    formatter = logging.Formatter(
+        fmt="%(asctime)s.%(msecs)03d %(levelname)s %(name)s: %(message)s",
+        datefmt="%Y-%m-%d %H:%M:%S",
+    )
+    handler.setFormatter(formatter)
+
+    root.handlers.clear()
+    root.addHandler(handler)
+
+
+setup_logging(args)
 
 selected_data_source = None
 selected_tracking_approach = None
