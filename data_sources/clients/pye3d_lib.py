@@ -139,7 +139,7 @@ class EyeTracker:
                 self._video_capture = None
 
             if self.window.winfo_exists():
-                self.window.destroy()
+                self.root.after(0, self.window.destroy)
 
         except tk.TclError:
             self.logger.warning("Tkinter window was already closed.")

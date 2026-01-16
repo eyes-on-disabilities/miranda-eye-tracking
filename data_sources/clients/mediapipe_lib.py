@@ -149,10 +149,16 @@ class HeadTracker:
                 self._video_capture.release()
                 self._video_capture = None
 
-            self._face_mesh.close()
+            # mediapipe can throw if close() is called twice
+            try:
+                if getattr(self, "_face_mesh", None) is not None:
+                    self._face_mesh.close()
+                    self._face_mesh = None
+            except ValueError:
+                self._face_mesh = None
 
             if self.window.winfo_exists():
-                self.window.destroy()
+                self.root.after(0, self.window.destroy)
 
         except tk.TclError:
             self.logger.warning("Tkinter window was already closed.")

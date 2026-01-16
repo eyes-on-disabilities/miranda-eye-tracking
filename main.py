@@ -1,9 +1,10 @@
 import argparse
+import queue
 import time
 import traceback
 from datetime import datetime, timedelta
-from threading import Thread
-from typing import Callable, Iterator, List
+from threading import Event, Thread
+from typing import Callable, Iterator, List, Optional, Tuple
 
 import numpy as np
 import screeninfo
@@ -12,8 +13,7 @@ import calibration
 import config
 from calibration import CalibrationInstruction, CalibrationResult
 from data_sources import data_sources
-from guis.tkinter.calibration_window import (CalibrationWindow,
-                                             CalibrationWindowButton)
+from guis.tkinter.calibration_window import CalibrationWindow, CalibrationWindowButton
 from guis.tkinter.main_menu_window import MainMenuWindow
 from misc import Vector
 from mouse_movement import MouseMovementType
@@ -83,7 +83,7 @@ data_source = None
 tracking_approach = None
 publisher = None
 
-running = True
+stop_event = Event()
 
 calibration_result = None
 temp_calibration_result = None
@@ -100,6 +100,9 @@ last_mouse_position = [monitor.width / 2, monitor.height / 2]
 logger = logging.getLogger(__name__)
 
 logger.info(f"{config.APP_FULL_NAME} {config.APP_VERSION}")
+
+UiMsg = Tuple[str, object]
+ui_queue: "queue.SimpleQueue[UiMsg]" = queue.SimpleQueue()
 
 
 def reload_data_source(data_source_key, root_window):
@@ -143,30 +146,117 @@ def reload_calibration_result():
 
 def loop():
     global last_data_source_vector, last_mouse_position
-    while running:
+    while not stop_event.is_set():
         try:
             last_data_source_vector = data_source.get_next_vector()
-            main_menu_window.unset_mouse_point()
-            main_menu_window.set_data_source_has_data(last_data_source_vector is not None)
+
+            ui_queue.put(("data_source_has_data", last_data_source_vector is not None))
+
             if last_data_source_vector is not None and tracking_approach.is_calibrated():
                 mouse_movement = tracking_approach.get_next_mouse_movement(last_data_source_vector)
                 if mouse_movement is not None:
                     last_mouse_position = get_new_mouse_position(mouse_movement, last_mouse_position)
-                    if calibration_window is not None:
-                        if not in_calibration:
-                            calibration_window.set_mouse_point(last_mouse_position)
-                    else:
-                        main_menu_window.set_mouse_point(last_mouse_position)
-                        publisher.push(last_mouse_position)
+
+                    # Schedule UI update (Tk thread will decide which window to paint on)
+                    ui_queue.put(("mouse_point", tuple(last_mouse_position)))
+
+                    # Publisher might touch Tk internally; keep on Tk thread too
+                    ui_queue.put(("publisher_push", tuple(last_mouse_position)))
+
+            else:
+                ui_queue.put(("unset_mouse_point", None))
+
         except Exception:
             traceback.print_exc()
+
         time.sleep(config.LOOP_SLEEP_IN_MILLISEC / 1000)
+
+
+def poll_ui():
+    # Runs on Tk thread only
+    if stop_event.is_set():
+        return
+
+    while True:
+        try:
+            msg, payload = ui_queue.get_nowait()
+        except Exception:
+            break
+
+        try:
+            if msg == "data_source_has_data":
+                if main_menu_window is not None:
+                    main_menu_window.set_data_source_has_data(bool(payload))
+
+            elif msg == "unset_mouse_point":
+                if calibration_window is None:
+                    if main_menu_window is not None:
+                        main_menu_window.unset_mouse_point()
+                else:
+                    if calibration_window is not None and not in_calibration:
+                        calibration_window.unset_mouse_point()
+
+            elif msg == "mouse_point":
+                pos = payload
+                if pos is None:
+                    continue
+
+                if calibration_window is not None:
+                    if not in_calibration:
+                        calibration_window.set_mouse_point(pos)
+                else:
+                    if main_menu_window is not None:
+                        main_menu_window.unset_mouse_point()
+                        main_menu_window.set_mouse_point(pos)
+
+            elif msg == "publisher_push":
+                pos = payload
+                if publisher is not None and pos is not None:
+                    publisher.push(pos)
+
+        except Exception:
+            traceback.print_exc()
+
+    try:
+        root_window.after(15, poll_ui)
+    except Exception:
+        pass
+
+
+def on_close():
+    if stop_event.is_set():
+        return
+    stop_event.set()
+
+    try:
+        if data_source is not None:
+            data_source.stop()
+    except Exception:
+        traceback.print_exc()
+
+    try:
+        if publisher is not None:
+            publisher.stop()
+    except Exception:
+        traceback.print_exc()
+
+    try:
+        if calibration_window is not None:
+            calibration_window.close_window()
+    except Exception:
+        pass
+
+    try:
+        root_window.destroy()
+    except Exception:
+        pass
 
 
 def close_and_unset_calibration_window():
     global calibration_window, in_calibration
     in_calibration = False
-    calibration_window.close_window()
+    if calibration_window is not None:
+        calibration_window.close_window()
     calibration_window = None
 
 
@@ -182,13 +272,13 @@ def accept_or_reject_temp_calibration_result(accept_temp_calibration_result: boo
 
 
 def redo_calibration():
-    if not in_calibration:
+    if not in_calibration and calibration_window is not None:
         calibration_window.unset_buttons()
         on_calibration_requested(calibration_window)
 
 
 def show_final_text_for_seconds(seconds, on_finish):
-    if in_calibration or calibration_window is None:  # when a calibration started somewhere else or the gui was closed
+    if in_calibration or calibration_window is None:
         return
     if seconds == 0:
         on_finish()
@@ -246,17 +336,19 @@ def show_preparational_text(preparational_text: str, on_finish: Callable, end_ti
         end_time = now + timedelta(seconds=config.SHOW_PREP_CALIBRATION_TEXT_FOR_SEC)
 
     if end_time < now:
-        calibration_window.unset_main_text()
+        if calibration_window is not None:
+            calibration_window.unset_main_text()
         on_finish()
     else:
         remaining_seconds = int((end_time - now).total_seconds())
-        calibration_window.set_main_text(
-            preparational_text
-            + "\nYou can close this window by pressing <Escape>."
-            + f"\nInstructions come in {remaining_seconds}"
-        )
-        calibration_window.bind("<Escape>", lambda _: close_and_unset_calibration_window())
-        calibration_window.after(250, show_preparational_text, preparational_text, on_finish, end_time)
+        if calibration_window is not None:
+            calibration_window.set_main_text(
+                preparational_text
+                + "\nYou can close this window by pressing <Escape>."
+                + f"\nInstructions come in {remaining_seconds}"
+            )
+            calibration_window.bind("<Escape>", lambda _: close_and_unset_calibration_window())
+            calibration_window.after(250, show_preparational_text, preparational_text, on_finish, end_time)
 
 
 def scale_vector_to_screen(vector):
@@ -370,6 +462,8 @@ def collect_calibration_vectors(
 
 main_menu_window = MainMenuWindow()
 root_window = main_menu_window.get_window()
+root_window.protocol("WM_DELETE_WINDOW", on_close)
+root_window.after(0, poll_ui)
 
 reload_data_source(args.data_source, root_window)
 reload_tracking_approach(args.tracking_approach)
@@ -396,12 +490,24 @@ main_menu_window.on_publisher_change_requested(
 
 main_menu_window.on_calibration_requested(on_calibration_requested)
 
-request_loop = Thread(target=loop)
+request_loop = Thread(target=loop, daemon=True)
 request_loop.start()
 
 main_menu_window.mainloop()
-running = False
+
+stop_event.set()
 request_loop.join(timeout=1)
-data_source.stop()
-publisher.stop()
+
+try:
+    if data_source is not None:
+        data_source.stop()
+except Exception:
+    traceback.print_exc()
+
+try:
+    if publisher is not None:
+        publisher.stop()
+except Exception:
+    traceback.print_exc()
+
 logger.info("bye")
