@@ -56,3 +56,50 @@ _Publishers_ take the mouse movements created by the tracking approach and publi
 # example
 {"x": 173, "y": 432, "timestamp": "2024-11-14 00:56:42.308879"}
 ```
+
+## Open Source License Attribution
+
+This application uses Open Source components. You can find the source code of their open source projects along with license information below. We acknowledge and are grateful to these developers for their contributions to open source.
+
+### [MediaPipe](https://mediapipe.dev/)
+- Copyright (c) Google LLC
+- [Apache License 2.0](https://github.com/google-ai-edge/mediapipe/blob/master/LICENSE)
+
+### [MessagePack for Python](https://msgpack.org/)
+- Copyright (C) 2008–2011 INADA Naoki <songofacandy@gmail.com>
+- [Apache License 2.0](https://github.com/msgpack/msgpack-python/blob/main/COPYING)
+
+### [NumPy](https://numpy.org/)
+- Copyright (c) 2005–2025 NumPy Developers
+- [BSD 3-Clause License](https://github.com/numpy/numpy/blob/main/LICENSE.txt)
+
+### [OpenCV (opencv-python)](https://pypi.org/project/opencv-python/)
+- Copyright (c) Olli-Pekka Heinisuo
+- [MIT License](https://github.com/opencv/opencv-python/blob/master/LICENSE.txt)
+
+### [pupil-detectors](https://github.com/pupil-labs/pupil-detectors)
+- Copyright (c) Pupil Labs
+- [LGPL 3.0 License](https://github.com/pupil-labs/pupil-detectors/blob/master/COPYING)
+
+### [PyAutoGUI](https://github.com/asweigart/pyautogui)
+- Copyright (c) 2014 Al Sweigart
+- [BSD 3-Clause License](https://github.com/asweigart/pyautogui/blob/master/LICENSE.txt)
+
+### [pye3d-detector](https://pye3d-detector.readthedocs.io/en/latest/)
+- Copyright (c) Pupil Labs
+- [LGPL 3.0 License](https://github.com/pupil-labs/pye3d-detector/blob/master/LICENSE)
+
+### [python-osc](https://github.com/attwad/python-osc)
+- [The Unlicense](https://github.com/attwad/python-osc/blob/main/LICENSE.txt)
+
+### [pyttsx3](https://github.com/nateshmbhat/pyttsx3)
+- Copyright (c) Natesh Bhat
+- [Mozilla Public License 2.0](https://github.com/nateshmbhat/pyttsx3/blob/master/LICENSE)
+
+### [screeninfo](https://github.com/rr-/screeninfo)
+- Copyright (c) 2015 Marcin Kurczewski
+- [MIT License](https://github.com/rr-/screeninfo/blob/master/LICENSE.md)
+
+### [PyZMQ](https://github.com/zeromq/pyzmq)
+- Copyright (c) 2009–2012 Brian Granger, Min Ragan-Kelley
+- [BSD 3-Clause License](https://github.com/zeromq/pyzmq/blob/main/LICENSE.md)
