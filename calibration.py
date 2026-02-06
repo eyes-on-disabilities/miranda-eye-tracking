@@ -1,7 +1,9 @@
 import csv
 import os
+import sys
 from typing import List
 
+import config
 from misc import Vector
 
 
@@ -28,8 +30,13 @@ class CalibrationResult:
         self.vectors = vectors
 
 
-directory = ".calibration_results"
-file_format = f"{directory}/{{}}_{{}}.csv"
+base_dir = config.WINDOWS_CONFIG_DIR if sys.platform.startswith("win") else config.LINUX_CONFIG_DIR
+directory = os.path.join(base_dir, "calibration_results")
+file_format = os.path.join(directory, "{}_{}.csv")
+
+
+def _ensure_dirs():
+    os.makedirs(directory, exist_ok=True)
 
 
 def has_result(data_source: str, tracking_approach: str) -> bool:
@@ -45,8 +52,7 @@ def load_result(data_source: str, tracking_approach: str) -> CalibrationResult:
 
 
 def save_result(data_source: str, tracking_approach: str, calibration_result: CalibrationResult):
-    if not os.path.exists(directory):
-        os.mkdir(directory)
+    _ensure_dirs()
     with open(file_format.format(data_source, tracking_approach), "w", newline="") as f:
         writer = csv.writer(f)
         writer.writerows(calibration_result.vectors)

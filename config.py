@@ -1,5 +1,8 @@
 # meta
+import os
+import sys
 from misc import resource_path
+
 APP_SHORT_NAME = "Miranda"
 APP_FULL_NAME = "Miranda Eye Tracking Screen Calibrator"
 APP_VERSION = "1.0.0-alpha.1"
@@ -8,6 +11,16 @@ APP_ICON_WINDOWS = resource_path("assets/icon.ico")
 APP_DESCRIPTION = "The tool for calibrating eye and head tracker input to match your gaze on the screen."
 APP_LINK_WEBSITE = "https://gaming.ifb-stiftung.de/eyes-on-disabilities-home/"
 APP_LINK_CODE = "https://codeberg.org/eyes-on-disabilities/miranda-eye-tracking-screen-calibrator"
+
+LINUX_CONFIG_DIR = os.path.join(
+    os.environ.get("XDG_CONFIG_HOME", os.path.expanduser("~/.config")),
+    APP_SHORT_NAME,
+)
+
+WINDOWS_CONFIG_DIR = os.path.join(
+    os.environ.get("APPDATA", os.path.expanduser("~")),
+    APP_SHORT_NAME,
+)
 
 # in application
 MOUSE_SPEED_IN_PX = 20
