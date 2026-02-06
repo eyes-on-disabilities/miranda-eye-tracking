@@ -189,7 +189,7 @@ class TtsKeyboardPublisher(Publisher):
         self._stop_loop()
         try:
             if self.window is not None and self.window.winfo_exists():
-                self.root.after(0, self.window.destroy)
+                self.root_window.after(0, self.window.destroy)
         except tk.TclError:
             self.logger.warning("Tkinter window was already closed.")
 
