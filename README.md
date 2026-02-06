@@ -1,4 +1,4 @@
-# Miranda – The Eye Tracking Screen Calibrator
+# Miranda – The Eye Tracking Toolkit
 
 ![Two applications running. One is AITrack, which tracks the head position and rotation. The other is Miranda, receiving the data and calibrating it against the screen.](assets/README_hero.png)
 
