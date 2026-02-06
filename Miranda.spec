@@ -4,10 +4,11 @@ from PyInstaller.utils.hooks import collect_submodules, collect_data_files
 hiddenimports = []
 hiddenimports += collect_submodules("pye3d")
 hiddenimports += collect_submodules("mediapipe")
-hiddenimports += ['PIL._tkinter_finder']
+hiddenimports += ["PIL._tkinter_finder"]
+
 datas = []
-datas += collect_data_files('pye3d', includes=['refraction_models/*.msgpack'])
-datas += collect_data_files('assets', includes=['*.png', '*.ico'])
+datas += collect_data_files("pye3d", includes=["refraction_models/*.msgpack"])
+datas += collect_data_files("assets", includes=["*.png", "*.ico"])
 datas += collect_data_files(
     "mediapipe",
     includes=[
@@ -19,14 +20,11 @@ datas += collect_data_files(
 )
 
 a = Analysis(
-    ['main.py'],
+    ["main.py"],
     pathex=[],
     binaries=[],
     datas=datas,
-    # there is a problem with Tk not finding some dynamically loaded modules,
-    # which is why we need to manually add them.
-    # https://stackoverflow.com/questions/52675162/pyinstaller-doesnt-play-well-with-imagetk-and-tkinter
-    hiddenimports=['PIL._tkinter_finder'],
+    hiddenimports=hiddenimports,
     hookspath=[],
     hooksconfig={},
     runtime_hooks=[],
@@ -40,23 +38,15 @@ pyz = PYZ(a.pure)
 exe = EXE(
     pyz,
     a.scripts,
+    a.binaries,
+    a.datas,
     [],
-    exclude_binaries=True,
-    name='Miranda',
+    name="Miranda",
     debug=False,
     bootloader_ignore_signals=False,
     strip=False,
     upx=True,
     console=False,
-    icon='assets/icon.ico',
-)
-
-coll = COLLECT(
-    exe,
-    a.binaries,
-    a.datas,
-    strip=False,
-    upx=True,
-    upx_exclude=[],
-    name='Miranda',
+    icon="assets/icon.ico",
+    onefile=True,
 )
