@@ -23,6 +23,9 @@ from tracking_approaches import tracking_approaches
 import logging
 import sys
 
+if getattr(sys, "frozen", False):
+    import pyi_splash
+    pyi_splash.close()
 
 parser = argparse.ArgumentParser()
 parser.add_argument(

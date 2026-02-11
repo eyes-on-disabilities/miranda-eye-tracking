@@ -4,7 +4,7 @@ from misc import resource_path
 
 # meta
 APP_SHORT_NAME = "Miranda"
-APP_FULL_NAME = "Miranda Eye Tracking"
+APP_FULL_NAME = "Miranda Eye-Tracking"
 APP_VERSION = "1.0.0-alpha.1"
 APP_ICON_LINUX = resource_path("assets/icon.png")
 APP_ICON_WINDOWS = resource_path("assets/icon.ico")

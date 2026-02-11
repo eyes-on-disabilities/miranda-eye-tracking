@@ -27,7 +27,7 @@ class AboutWindow:
             self.window.iconphoto(False, PhotoImage(icon_image))
 
         image = Image.open(resource_path("assets/icon_with_text.png"))
-        resize_percent = 50
+        resize_percent = 100
         width = int(image.width * resize_percent / 100)
         height = int(image.height * resize_percent / 100)
         image = image.resize((width, height))
