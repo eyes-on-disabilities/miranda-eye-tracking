@@ -273,6 +273,7 @@ def accept_or_reject_temp_calibration_result(accept_temp_calibration_result: boo
     else:
         tracking_approach.calibrate(calibration_result)
     temp_calibration_result = None
+    main_menu_window.set_has_calibration_result(calibration_result is not None)
 
 
 def redo_calibration():
