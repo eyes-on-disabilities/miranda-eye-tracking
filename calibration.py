@@ -1,10 +1,16 @@
 import csv
 import os
-import sys
 from typing import List
 
 import config
 from misc import Vector
+
+
+results_directory = os.path.join(config.CONFIG_DIR, "calibration_results")
+results_file_format = os.path.join(results_directory, "{}_{}.csv")
+
+# ensure results_directory exists:
+os.makedirs(results_directory, exist_ok=True)
 
 
 class CalibrationInstruction:
@@ -30,35 +36,25 @@ class CalibrationResult:
         self.vectors = vectors
 
 
-base_dir = config.WINDOWS_CONFIG_DIR if sys.platform.startswith("win") else config.LINUX_CONFIG_DIR
-directory = os.path.join(base_dir, "calibration_results")
-file_format = os.path.join(directory, "{}_{}.csv")
-
-
-def _ensure_dirs():
-    os.makedirs(directory, exist_ok=True)
-
-
 def has_result(data_source: str, tracking_approach: str) -> bool:
-    return os.path.exists(file_format.format(data_source, tracking_approach))
+    return os.path.exists(results_file_format.format(data_source, tracking_approach))
 
 
 def load_result(data_source: str, tracking_approach: str) -> CalibrationResult:
     vectors = []
-    with open(file_format.format(data_source, tracking_approach), "r") as f:
+    with open(results_file_format.format(data_source, tracking_approach), "r") as f:
         for row in csv.reader(f):
             vectors.append((float(row[0]), float(row[1])))  # Convert strings to floats
     return CalibrationResult(vectors)
 
 
 def save_result(data_source: str, tracking_approach: str, calibration_result: CalibrationResult):
-    _ensure_dirs()
-    with open(file_format.format(data_source, tracking_approach), "w", newline="") as f:
+    with open(results_file_format.format(data_source, tracking_approach), "w", newline="") as f:
         writer = csv.writer(f)
         writer.writerows(calibration_result.vectors)
 
 
 def delete_result(data_source: str, tracking_approach: str):
-    config_file = file_format.format(data_source, tracking_approach)
+    config_file = results_file_format.format(data_source, tracking_approach)
     if os.path.exists(config_file):
         os.remove(config_file)

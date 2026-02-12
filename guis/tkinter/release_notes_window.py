@@ -8,13 +8,8 @@ from guis.tkinter.hyperlink import Hyperlink
 
 
 def _get_notes_file_path() -> str:
-    base_dir = (
-        config.WINDOWS_CONFIG_DIR
-        if sys.platform.startswith("win")
-        else config.LINUX_CONFIG_DIR
-    )
     filename = f"release_notes_shown_{config.APP_VERSION}"
-    return os.path.join(base_dir, filename)
+    return os.path.join(config.CONFIG_DIR, filename)
 
 
 def show_release_notes_if_needed(parent: tk.Misc) -> None:
@@ -23,7 +18,7 @@ def show_release_notes_if_needed(parent: tk.Misc) -> None:
     if os.path.exists(notes_file):
         return
 
-    os.makedirs(os.path.dirname(notes_file), exist_ok=True)
+    open(notes_file, "a").close()
 
     dialog = tk.Toplevel(parent)
     dialog.title(f"Release notes ({config.APP_VERSION})")

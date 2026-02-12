@@ -21,15 +21,18 @@ Nevertheless, we are very happy that you are using Miranda. If you have any ques
 Your Eyes-on-Disabilities Team
 """
 
-LINUX_CONFIG_DIR = os.path.join(
+_LINUX_CONFIG_DIR = os.path.join(
     os.environ.get("XDG_CONFIG_HOME", os.path.expanduser("~/.config")),
     APP_SHORT_NAME,
 )
-
-WINDOWS_CONFIG_DIR = os.path.join(
+_WINDOWS_CONFIG_DIR = os.path.join(
     os.environ.get("APPDATA", os.path.expanduser("~")),
     APP_SHORT_NAME,
 )
+CONFIG_DIR = _WINDOWS_CONFIG_DIR if sys.platform.startswith("win") else _LINUX_CONFIG_DIR
+# ensure config directory exists:
+os.makedirs(CONFIG_DIR, exist_ok=True)
+
 
 # in application
 MOUSE_SPEED_IN_PX = 20
