@@ -5,13 +5,15 @@ from misc import resource_path
 # meta
 APP_SHORT_NAME = "Miranda"
 APP_FULL_NAME = "Miranda Eye-Tracking"
-APP_VERSION = "1.0.0-alpha.1"
+APP_VERSION = "0.1.0"
 APP_ICON_LINUX = resource_path("assets/icon.png")
 APP_ICON_WINDOWS = resource_path("assets/icon.ico")
 APP_DESCRIPTION = "An eye-tracking-toolkit for calibrating eye- and head-tracker inputs to match your screen gaze."
 APP_LINK_WEBSITE = "https://eyes-on-disabilities.org/"
 APP_LINK_CODE = "https://codeberg.org/eyes-on-disabilities/miranda-eye-tracking"
 APP_RELEASE_NOTES = """
+Hello, and Welcome to Miranda.
+
 This software is in an early stage of development. Expect things to not work properly, or to be insufficiently documented, or to simply look bad. We're working on it.
 
 Nevertheless, we are very happy that you are using Miranda. If you have any questions or would even like to help, please feel free to contact us!
