@@ -52,26 +52,26 @@ class MainMenuWindow:
         dropdowns_frame.grid_columnconfigure(1, weight=1)
         dropdowns_frame.grid_columnconfigure(2, weight=1)
 
-        Label(dropdowns_frame, text="data source").grid(row=0, column=0, sticky="w", pady=3)
-        self.data_source_dropdown = Dropdown(dropdowns_frame, "data source")
-        self.data_source_dropdown.grid(row=1, column=0, sticky="we", padx=3)
+        Label(dropdowns_frame, text="input").grid(row=0, column=0, sticky="w", pady=3)
+        self.input_method_dropdown = Dropdown(dropdowns_frame, "input")
+        self.input_method_dropdown.grid(row=1, column=0, sticky="we", padx=3)
 
         Label(dropdowns_frame, text="tracking approach").grid(row=0, column=1, sticky="w", pady=3)
         self.tracking_approach_dropdown = Dropdown(dropdowns_frame, "tracking approach")
         self.tracking_approach_dropdown.grid(row=1, column=1, sticky="we", padx=3)
 
-        Label(dropdowns_frame, text="publisher").grid(row=0, column=2, sticky="w", pady=3)
-        self.publisher_dropdown = Dropdown(dropdowns_frame, "publisher")
-        self.publisher_dropdown.grid(row=1, column=2, sticky="we", padx=3)
+        Label(dropdowns_frame, text="output").grid(row=0, column=2, sticky="w", pady=3)
+        self.output_method_dropdown = Dropdown(dropdowns_frame, "output")
+        self.output_method_dropdown.grid(row=1, column=2, sticky="we", padx=3)
 
         # on window resize close dropdowns
         self.window.bind(
             "<Configure>",
             lambda e: (
                 [
-                    self.data_source_dropdown.close_dropdown(),
+                    self.input_method_dropdown.close_dropdown(),
                     self.tracking_approach_dropdown.close_dropdown(),
-                    self.publisher_dropdown.close_dropdown(),
+                    self.output_method_dropdown.close_dropdown(),
                 ]
                 if e.widget == self.window
                 else None
@@ -84,8 +84,8 @@ class MainMenuWindow:
         right_frame = Frame(self.window)
         right_frame.pack(side="right", fill=tkinter.BOTH, expand=True, padx=20, pady=20)
 
-        self.data_source_has_data_label = Label(left_frame)
-        self.data_source_has_data_label.pack(anchor="w")
+        self.input_method_has_data_label = Label(left_frame)
+        self.input_method_has_data_label.pack(anchor="w")
 
         self.calibration_results_label = Label(left_frame)
         self.calibration_results_label.pack(anchor="w")
@@ -127,16 +127,16 @@ class MainMenuWindow:
     def unset_mouse_point(self):
         self.preview_canvas.delete("preview_mouse_point")
 
-    # data sources
+    # input methods
 
-    def set_data_source_options(self, options: dict[MainMenuOption]):
-        self.data_source_dropdown.set_menu_options(options)
+    def set_input_method_options(self, options: dict[MainMenuOption]):
+        self.input_method_dropdown.set_menu_options(options)
 
-    def set_current_data_source(self, data_source):
-        self.data_source_dropdown.set_current_selection(data_source)
+    def set_current_input_method(self, input_method):
+        self.input_method_dropdown.set_current_selection(input_method)
 
-    def on_data_source_change_requested(self, func):
-        self.data_source_dropdown.on_selection_changed(func)
+    def on_input_method_change_requested(self, func):
+        self.input_method_dropdown.on_selection_changed(func)
 
     # tracking approaches
 
@@ -149,25 +149,25 @@ class MainMenuWindow:
     def on_tracking_approach_change_requested(self, func):
         self.tracking_approach_dropdown.on_selection_changed(func)
 
-    # publishers
+    # output methods
 
-    def set_publisher_options(self, options):
-        self.publisher_dropdown.set_menu_options(options)
+    def set_output_method_options(self, options):
+        self.output_method_dropdown.set_menu_options(options)
 
-    def set_current_publisher(self, publisher):
-        self.publisher_dropdown.set_current_selection(publisher)
+    def set_current_output_method(self, output_method):
+        self.output_method_dropdown.set_current_selection(output_method)
 
-    def on_publisher_change_requested(self, func):
-        self.publisher_dropdown.on_selection_changed(func)
+    def on_output_method_change_requested(self, func):
+        self.output_method_dropdown.on_selection_changed(func)
 
     # the rest
 
     def set_has_calibration_result(self, has_result):
         self.calibration_results_label.config(text="✅︎ calibrated" if has_result else "❌ not yet calibrated.")
 
-    def set_data_source_has_data(self, data_source_has_data):
-        self.data_source_has_data_label.config(
-            text="✅︎ receive data from data source." if data_source_has_data else "❌ receive no data from data source."
+    def set_input_method_has_data(self, input_method_has_data):
+        self.input_method_has_data_label.config(
+            text="✅︎ receive data from input." if input_method_has_data else "❌ receive no data from input."
         )
 
     def mainloop(self):

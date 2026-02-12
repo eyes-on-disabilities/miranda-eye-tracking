@@ -6,7 +6,7 @@ from dataclasses import dataclass, field
 from typing import Callable, Optional, Tuple
 
 from misc import Vector, TTS
-from publishers.publisher import Publisher
+from output_methods.output_method import Publisher
 
 import logging
 

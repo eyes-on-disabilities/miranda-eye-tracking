@@ -2,7 +2,7 @@ from misc import Vector
 from typing import Optional
 import pyautogui
 
-from data_sources.data_source import DataSource
+from input_methods.input_method import DataSource
 
 import logging
 

@@ -1,7 +1,7 @@
 from typing import Optional
 
-from data_sources.clients.opentrack import Opentrack
-from data_sources.data_source import DataSource
+from input_methods.clients.opentrack import Opentrack
+from input_methods.input_method import DataSource
 from misc import Vector
 
 import logging

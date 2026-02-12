@@ -1,29 +1,28 @@
 from typing import Optional
 
-from data_sources.clients.mediapipe_lib import HeadTracker
-from data_sources.data_source import DataSource
+from input_methods.input_method import DataSource
 from misc import Vector
+from input_methods.clients.eyetrackvr import EyeTrackVR
 
 import logging
 
 
-class MediaPipeDataSource(DataSource):
+class EyeTrackVRDataSource(DataSource):
     def __init__(self, root_window):
         self.logger = logging.getLogger(self.__class__.__name__)
-        self.mediapipe = HeadTracker(root_window)
+        self.eyetrackvr = EyeTrackVR()
         self.logger.info("initialized")
 
     def start(self):
-        self.mediapipe.start()
+        self.eyetrackvr.start()
         self.logger.info("started")
 
     def stop(self):
-        self.mediapipe.stop()
+        self.eyetrackvr.stop()
         self.logger.info("stopped")
 
     def get_next_vector(self) -> Optional[Vector]:
-        last_data = self.mediapipe.get_latest_data()
-        next_vector = (last_data["yaw_deg"],
-                       last_data["pitch_deg"]) if last_data else None
+        x, y = self.eyetrackvr.get_last_data()
+        next_vector = (x, y) if x and y else None
         self.logger.debug(f"next_vector: {next_vector}")
         return next_vector

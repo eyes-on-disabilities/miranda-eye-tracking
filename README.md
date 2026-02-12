@@ -39,26 +39,22 @@ PyInstaller .\Miranda.spec
 
 ## Concepts
 
-In short, data comes from a _data source_, this data will be translated into mouse movements using a _tracking approach_, and these mouse movements will be _published_ for further usage. Every data source and tracking approach combination needs a calibration first.
+In short, an _input method_ provides eye-tracking data, this data will be translated into screen coordinates using a _tracking approach_, and these coordinates will be used or publishes using an _output method_. Every input method and tracking approach combination needs a calibration first.
 
-### Data Source
-A _data source_ is where eye and head tracking data comes from. The data could be the yaw and pitch rotation of your eyes in degrees. The data source is mostly a different application, that needs to run alongside Miranda. Since the data itself gives no indication of where the user is looking at or how the mouse cursor shall be moved, we need a _tracking approach_.
+### Input Method
+An _input method_ is where eye- and head-tracking data comes from. The data could be the yaw and pitch rotation of your eyes in degrees. An input method may be an integrated functionality of Miranda, or may be an external application that needs to run alongside Miranda. Since the data itself gives no indication of where the user is looking at we need a _tracking approach_.
 
 ### Tracking Approach
-A _tracking approach_ tells how the data from the data source shall be translated into a mouse movement. There are two approaches:
+A _tracking approach_ tells how the data from an input method shall be translated into screen coordinates – a position on the screen, e.g. where a mouse cursor could move to. There are two approaches:
 
-- **Gaze on Screen**: The user is directly looking at the screen. The cursor shall follow the gaze. This is the most straight-forward and probably mostly used approach.
-- **D-Pad**: This approach is a good alternative if your input device is not accurate enough for the _Gaze on Screen_ approach. Usually, a D-pad is a flat, typically thumb-operated, directional control. Likewise with this approach the cursor is looking at a d-pad to steer the cursor. E.g. by looking at the "up" arrow, the cursor moves up.
+- **Gaze on Screen**: The user is directly looking at the screen. The eye movement directly translates to a screen position. This is the most straight-forward approach.
+- **D-Pad**: This approach is a good alternative if your input is not accurate enough for the _Gaze on Screen_ approach. Usually, a D-pad is a flat, typically thumb-operated, directional control. Likewise with this approach the current screen coordinates is steered by looking at a d-pad. E.g. by looking at the "up" arrow, the screen coordinates moves up.
 
 ### Calibration
-Before we can translate the data from the data source into mouse movements, we need to do a calibration first. Every data source and tracking approach combination needs its own calibration. Once such a calibration is done the result will be stored and is available on the next start of Miranda.
+Before we can translate the data from the input method into screen coordinates, we need to do a calibration first. Every input method and tracking approach combination needs its own calibration. Once such a calibration is done the result will be stored and is available on the next start of Miranda.
 
-### Publishers
-_Publishers_ take the mouse movements created by the tracking approach and publish them for further usage of other applications. Currently there is just the _UDP-Publisher_, which publishes the mouse coordinates via UDP to 127.0.0.1 port 9999 in the following format:
-```
-# example
-{"x": 173, "y": 432, "timestamp": "2024-11-14 00:56:42.308879"}
-```
+### Output Methods
+_Output methods_ take the screen coordinates created by the tracking approach and make use of them. Such a method could simply push the coordinates via UDP, like with the _UDP-Publisher_. Or it could be a whole tool, like a TTS keyboard.
 
 ## Open Source License Attribution
 

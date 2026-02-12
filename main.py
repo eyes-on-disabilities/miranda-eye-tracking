@@ -12,13 +12,13 @@ import screeninfo
 import calibration
 import config
 from calibration import CalibrationInstruction, CalibrationResult
-from data_sources import data_sources
+from input_methods import input_methods
 from guis.tkinter.calibration_window import CalibrationWindow, CalibrationWindowButton
 from guis.tkinter.main_menu_window import MainMenuWindow
 from guis.tkinter.release_notes_window import show_release_notes_if_needed
 from misc import Vector
 from mouse_movement import MouseMovementType
-from publishers import publishers
+from output_methods import output_methods
 from tracking_approaches import tracking_approaches
 
 import logging
@@ -30,10 +30,10 @@ if getattr(sys, "frozen", False):
 
 parser = argparse.ArgumentParser()
 parser.add_argument(
-    "--data-source",
-    help='The provider of input data. default="%(default)s"',
-    choices=data_sources,
-    default=next(iter(data_sources)),  # the first mentioned key
+    "--input-method",
+    help='The method to get eye- or head-tracking data from. default="%(default)s"',
+    choices=input_methods,
+    default=next(iter(input_methods)),  # the first mentioned key
 )
 parser.add_argument(
     "--tracking-approach",
@@ -43,10 +43,10 @@ parser.add_argument(
     default=next(iter(tracking_approaches)),
 )
 parser.add_argument(
-    "--publisher",
-    help='The method for publishing the resulting vectors. default="%(default)s"',
-    choices=publishers,
-    default=next(iter(publishers)),
+    "--output-method",
+    help='The method for how to use the eye- or head-tracking data. default="%(default)s"',
+    choices=output_methods,
+    default=next(iter(output_methods)),
 )
 parser.add_argument(
     "--log-level",
@@ -79,13 +79,13 @@ def setup_logging(args) -> None:
 
 setup_logging(args)
 
-selected_data_source = None
+selected_input_method = None
 selected_tracking_approach = None
-selected_publisher = None
+selected_output_method = None
 
-data_source = None
+input_method = None
 tracking_approach = None
-publisher = None
+output_method = None
 
 stop_event = Event()
 
@@ -97,7 +97,7 @@ calibration_window = None
 in_calibration = False
 
 request_loop_thread = None
-last_data_source_vector = None
+last_input_method_vector = None
 monitor = screeninfo.get_monitors()[0]
 last_mouse_position = [monitor.width / 2, monitor.height / 2]
 
@@ -109,14 +109,14 @@ UiMsg = Tuple[str, object]
 ui_queue: "queue.SimpleQueue[UiMsg]" = queue.SimpleQueue()
 
 
-def reload_data_source(data_source_key, root_window):
-    logger.info(f"reload data source: {data_source_key}")
-    global selected_data_source, data_source
-    selected_data_source = data_source_key
-    if data_source is not None:
-        data_source.stop()
-    data_source = data_sources[selected_data_source].clazz(root_window)
-    data_source.start()
+def reload_input_method(input_method_key, root_window):
+    logger.info(f"reload input method: {input_method_key}")
+    global selected_input_method, input_method
+    selected_input_method = input_method_key
+    if input_method is not None:
+        input_method.stop()
+    input_method = input_methods[selected_input_method].clazz(root_window)
+    input_method.start()
 
 
 def reload_tracking_approach(tracking_approach_key):
@@ -126,38 +126,38 @@ def reload_tracking_approach(tracking_approach_key):
     tracking_approach = tracking_approaches[selected_tracking_approach].clazz()
 
 
-def reload_publisher(publisher_key, root_window):
-    logger.info(f"reload publisher: {publisher_key}")
-    global selected_publisher, publisher
-    selected_publisher = publisher_key
-    if publisher is not None:
-        publisher.stop()
-    publisher = publishers[selected_publisher].clazz(root_window)
-    publisher.start()
+def reload_output_method(output_method_key, root_window):
+    logger.info(f"reload output method: {output_method_key}")
+    global selected_output_method, output_method
+    selected_output_method = output_method_key
+    if output_method is not None:
+        output_method.stop()
+    output_method = output_methods[selected_output_method].clazz(root_window)
+    output_method.start()
 
 
 def reload_calibration_result():
     logger.info("reload calibration result")
-    global selected_data_source, selected_tracking_approach, tracking_approach
+    global selected_input_method, selected_tracking_approach, tracking_approach
     global calibration_result, main_menu_window, last_mouse_position
     calibration_result = None
     last_mouse_position = [monitor.width / 2, monitor.height / 2]
-    if calibration.has_result(selected_data_source, selected_tracking_approach):
-        calibration_result = calibration.load_result(selected_data_source, selected_tracking_approach)
+    if calibration.has_result(selected_input_method, selected_tracking_approach):
+        calibration_result = calibration.load_result(selected_input_method, selected_tracking_approach)
         tracking_approach.calibrate(calibration_result)
     main_menu_window.set_has_calibration_result(calibration_result is not None)
 
 
 def loop():
-    global last_data_source_vector, last_mouse_position
+    global last_input_method_vector, last_mouse_position
     while not stop_event.is_set():
         try:
-            last_data_source_vector = data_source.get_next_vector()
+            last_input_method_vector = input_method.get_next_vector()
 
-            ui_queue.put(("data_source_has_data", last_data_source_vector is not None))
+            ui_queue.put(("input_method_has_data", last_input_method_vector is not None))
 
-            if last_data_source_vector is not None and tracking_approach.is_calibrated():
-                mouse_movement = tracking_approach.get_next_mouse_movement(last_data_source_vector)
+            if last_input_method_vector is not None and tracking_approach.is_calibrated():
+                mouse_movement = tracking_approach.get_next_mouse_movement(last_input_method_vector)
                 if mouse_movement is not None:
                     last_mouse_position = get_new_mouse_position(mouse_movement, last_mouse_position)
 
@@ -165,7 +165,7 @@ def loop():
                     ui_queue.put(("mouse_point", tuple(last_mouse_position)))
 
                     # Publisher might touch Tk internally; keep on Tk thread too
-                    ui_queue.put(("publisher_push", tuple(last_mouse_position)))
+                    ui_queue.put(("output_method_push", tuple(last_mouse_position)))
 
             else:
                 ui_queue.put(("unset_mouse_point", None))
@@ -188,9 +188,9 @@ def poll_ui():
             break
 
         try:
-            if msg == "data_source_has_data":
+            if msg == "input_method_has_data":
                 if main_menu_window is not None:
-                    main_menu_window.set_data_source_has_data(bool(payload))
+                    main_menu_window.set_input_method_has_data(bool(payload))
 
             elif msg == "unset_mouse_point":
                 if calibration_window is None:
@@ -213,10 +213,10 @@ def poll_ui():
                         main_menu_window.unset_mouse_point()
                         main_menu_window.set_mouse_point(pos)
 
-            elif msg == "publisher_push":
+            elif msg == "output_method_push":
                 pos = payload
-                if publisher is not None and pos is not None:
-                    publisher.push(pos)
+                if output_method is not None and pos is not None:
+                    output_method.push(pos)
 
         except Exception:
             traceback.print_exc()
@@ -233,14 +233,14 @@ def on_close():
     stop_event.set()
 
     try:
-        if data_source is not None:
-            data_source.stop()
+        if input_method is not None:
+            input_method.stop()
     except Exception:
         traceback.print_exc()
 
     try:
-        if publisher is not None:
-            publisher.stop()
+        if output_method is not None:
+            output_method.stop()
     except Exception:
         traceback.print_exc()
 
@@ -268,8 +268,8 @@ def accept_or_reject_temp_calibration_result(accept_temp_calibration_result: boo
     global temp_calibration_result, calibration_result
     if accept_temp_calibration_result:
         calibration_result = temp_calibration_result
-        calibration.delete_result(selected_data_source, selected_tracking_approach)
-        calibration.save_result(selected_data_source, selected_tracking_approach, calibration_result)
+        calibration.delete_result(selected_input_method, selected_tracking_approach)
+        calibration.save_result(selected_input_method, selected_tracking_approach, calibration_result)
     else:
         tracking_approach.calibrate(calibration_result)
     temp_calibration_result = None
@@ -440,8 +440,8 @@ def collect_calibration_vectors(
     if now > end_time:
         on_finish(np.mean(np.array(vectors), axis=0) if len(vectors) > 0 else (0, 0))
     else:
-        if last_data_source_vector is not None:
-            vectors.append(last_data_source_vector)
+        if last_input_method_vector is not None:
+            vectors.append(last_input_method_vector)
 
         vector = calibration_instruction.vector
         text = calibration_instruction.text
@@ -470,15 +470,15 @@ show_release_notes_if_needed(root_window)
 root_window.protocol("WM_DELETE_WINDOW", on_close)
 root_window.after(0, poll_ui)
 
-reload_data_source(args.data_source, root_window)
+reload_input_method(args.input_method, root_window)
 reload_tracking_approach(args.tracking_approach)
-reload_publisher(args.publisher, root_window)
+reload_output_method(args.output_method, root_window)
 reload_calibration_result()
 
-main_menu_window.set_data_source_options(data_sources)
-main_menu_window.set_current_data_source(selected_data_source)
-main_menu_window.on_data_source_change_requested(
-    lambda new_data_source: (reload_data_source(new_data_source, root_window), reload_calibration_result())
+main_menu_window.set_input_method_options(input_methods)
+main_menu_window.set_current_input_method(selected_input_method)
+main_menu_window.on_input_method_change_requested(
+    lambda new_input_method: (reload_input_method(new_input_method, root_window), reload_calibration_result())
 )
 
 main_menu_window.set_tracking_approach_options(tracking_approaches)
@@ -487,10 +487,10 @@ main_menu_window.on_tracking_approach_change_requested(
     lambda new_tracking_approach: (reload_tracking_approach(new_tracking_approach), reload_calibration_result())
 )
 
-main_menu_window.set_publisher_options(publishers)
-main_menu_window.set_current_publisher(selected_publisher)
-main_menu_window.on_publisher_change_requested(
-    lambda new_publisher: reload_publisher(new_publisher, root_window)
+main_menu_window.set_output_method_options(output_methods)
+main_menu_window.set_current_output_method(selected_output_method)
+main_menu_window.on_output_method_change_requested(
+    lambda new_output_method: reload_output_method(new_output_method, root_window)
 )
 
 main_menu_window.on_calibration_requested(on_calibration_requested)
@@ -504,14 +504,14 @@ stop_event.set()
 request_loop.join(timeout=1)
 
 try:
-    if data_source is not None:
-        data_source.stop()
+    if input_method is not None:
+        input_method.stop()
 except Exception:
     traceback.print_exc()
 
 try:
-    if publisher is not None:
-        publisher.stop()
+    if output_method is not None:
+        output_method.stop()
 except Exception:
     traceback.print_exc()
 

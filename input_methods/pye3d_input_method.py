@@ -1,7 +1,7 @@
 from typing import Optional
 
-from data_sources.clients.pye3d_lib import EyeTracker
-from data_sources.data_source import DataSource
+from input_methods.clients.pye3d_lib import EyeTracker
+from input_methods.input_method import DataSource
 from misc import Vector
 
 import logging

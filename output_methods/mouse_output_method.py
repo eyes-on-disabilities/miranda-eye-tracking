@@ -1,4 +1,4 @@
-from publishers.publisher import Publisher
+from output_methods.output_method import Publisher
 from misc import Vector
 import pyautogui
 from datetime import datetime, timedelta
@@ -8,7 +8,7 @@ import logging
 
 class MousePublisher(Publisher):
     """Moves the Mouse to the given Vector.
-    When the mouse is moved manually this publisher pauses for some time."""
+    When the mouse is moved manually this output_method pauses for some time."""
 
     def __init__(self, root_window):
         self.logger = logging.getLogger(self.__class__.__name__)

@@ -1,7 +1,7 @@
 from typing import Optional
 
-from data_sources.clients.orlosky import Orlosky
-from data_sources.data_source import DataSource
+from input_methods.clients.orlosky import Orlosky
+from input_methods.input_method import DataSource
 from misc import Vector
 
 import logging

@@ -36,25 +36,25 @@ class CalibrationResult:
         self.vectors = vectors
 
 
-def has_result(data_source: str, tracking_approach: str) -> bool:
-    return os.path.exists(results_file_format.format(data_source, tracking_approach))
+def has_result(input_method: str, tracking_approach: str) -> bool:
+    return os.path.exists(results_file_format.format(input_method, tracking_approach))
 
 
-def load_result(data_source: str, tracking_approach: str) -> CalibrationResult:
+def load_result(input_method: str, tracking_approach: str) -> CalibrationResult:
     vectors = []
-    with open(results_file_format.format(data_source, tracking_approach), "r") as f:
+    with open(results_file_format.format(input_method, tracking_approach), "r") as f:
         for row in csv.reader(f):
             vectors.append((float(row[0]), float(row[1])))  # Convert strings to floats
     return CalibrationResult(vectors)
 
 
-def save_result(data_source: str, tracking_approach: str, calibration_result: CalibrationResult):
-    with open(results_file_format.format(data_source, tracking_approach), "w", newline="") as f:
+def save_result(input_method: str, tracking_approach: str, calibration_result: CalibrationResult):
+    with open(results_file_format.format(input_method, tracking_approach), "w", newline="") as f:
         writer = csv.writer(f)
         writer.writerows(calibration_result.vectors)
 
 
-def delete_result(data_source: str, tracking_approach: str):
-    config_file = results_file_format.format(data_source, tracking_approach)
+def delete_result(input_method: str, tracking_approach: str):
+    config_file = results_file_format.format(input_method, tracking_approach)
     if os.path.exists(config_file):
         os.remove(config_file)

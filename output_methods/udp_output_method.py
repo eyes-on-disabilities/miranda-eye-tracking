@@ -2,7 +2,7 @@ import json
 import socket
 from datetime import datetime
 
-from publishers.publisher import Publisher
+from output_methods.output_method import Publisher
 from misc import Vector
 
 import logging

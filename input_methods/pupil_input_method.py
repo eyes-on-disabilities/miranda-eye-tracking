@@ -1,7 +1,7 @@
 from typing import Optional
 
-from data_sources.clients.pupil import Pupil
-from data_sources.data_source import DataSource
+from input_methods.clients.pupil import Pupil
+from input_methods.input_method import DataSource
 from misc import Vector
 
 import logging
