@@ -15,6 +15,7 @@ from calibration import CalibrationInstruction, CalibrationResult
 from data_sources import data_sources
 from guis.tkinter.calibration_window import CalibrationWindow, CalibrationWindowButton
 from guis.tkinter.main_menu_window import MainMenuWindow
+from guis.tkinter.release_notes_window import show_release_notes_if_needed
 from misc import Vector
 from mouse_movement import MouseMovementType
 from publishers import publishers
@@ -465,6 +466,7 @@ def collect_calibration_vectors(
 
 main_menu_window = MainMenuWindow()
 root_window = main_menu_window.get_window()
+show_release_notes_if_needed(root_window)
 root_window.protocol("WM_DELETE_WINDOW", on_close)
 root_window.after(0, poll_ui)
 
