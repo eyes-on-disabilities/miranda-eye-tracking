@@ -23,7 +23,7 @@ output_methods: dict[MainMenuOption] = {
         key="tts-keyboard",
         title="TTS Keyboard",
         description="A text-to-speech-keyboard.",
-        icon=resource_path("assets/output_method_mouse.png"),
+        icon=resource_path("assets/output_method_tts-keyboard.png"),
         clazz=TtsKeyboardPublisher,
     ),
 }
