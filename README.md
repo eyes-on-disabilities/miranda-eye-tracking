@@ -58,7 +58,7 @@ _Output methods_ take the screen coordinates created by the tracking approach an
 
 ## Open Source License Attribution
 
-This application uses Open Source components. You can find the source code of their open source projects along with license information below. We acknowledge and are grateful to these developers for their contributions to open source.
+This application uses open source components. You can find the source code of their open source projects along with license information below. We acknowledge and are grateful to these developers for their contributions to open source.
 
 ### Libraries
 
@@ -77,3 +77,7 @@ This application uses Open Source components. You can find the source code of th
 ### Others
 
 * [EyeTracker](https://github.com/JEOresearch/EyeTracker), Copyright (c) 2024 JEOresearch, [MIT License](https://github.com/JEOresearch/EyeTracker/blob/main/LICENSE)
+
+## License
+
+Miranda is distributed under the terms of the [GPL version 3.0](LICENSE) or any later version.
