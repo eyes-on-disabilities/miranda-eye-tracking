@@ -2,19 +2,19 @@ from abc import ABC, abstractmethod
 from misc import Vector
 
 
-class Publisher(ABC):
+class OutputMethod(ABC):
     """Publishes a vector to any kind of output method.
     This method could be a simple `print` to the CLI
     or pushing the vector to a message queue."""
 
     @abstractmethod
     def start(self):
-        """Starts the Publisher."""
+        """Starts the OutputMethod."""
         pass
 
     @abstractmethod
     def stop(self):
-        """Stops the Publisher."""
+        """Stops the OutputMethod."""
         pass
 
     @abstractmethod

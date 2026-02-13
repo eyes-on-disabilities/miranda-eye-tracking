@@ -6,7 +6,7 @@ from dataclasses import dataclass, field
 from typing import Callable, Optional, Tuple
 
 from misc import Vector, TTS
-from output_methods.output_method import Publisher
+from output_methods.output_method import OutputMethod
 
 import logging
 
@@ -146,7 +146,7 @@ class Target:
         self.draw(canvas, rect)
 
 
-class TtsKeyboardPublisher(Publisher):
+class TtsKeyboardOutputMethod(OutputMethod):
     def __init__(self, root_window):
         self.logger = logging.getLogger(self.__class__.__name__)
         self.root_window = root_window

@@ -2,13 +2,13 @@ import json
 import socket
 from datetime import datetime
 
-from output_methods.output_method import Publisher
+from output_methods.output_method import OutputMethod
 from misc import Vector
 
 import logging
 
 
-class UdpPublisher(Publisher):
+class UdpOutputMethod(OutputMethod):
     """Pushes the vector as JSON objects over UDP"""
 
     def __init__(self, root_window, host="127.0.0.1", port=9999):

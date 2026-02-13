@@ -1,13 +1,13 @@
 from typing import Optional
 
 from input_methods.clients.pye3d_client import Pye3DClient
-from input_methods.input_method import DataSource
+from input_methods.input_method import InputMethod
 from misc import Vector
 
 import logging
 
 
-class Pye3dDataSource(DataSource):
+class Pye3dInputMethod(InputMethod):
     def __init__(self, root_window):
         self.logger = logging.getLogger(self.__class__.__name__)
         self.pye3d = Pye3DClient(root_window)

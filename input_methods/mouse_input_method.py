@@ -2,12 +2,12 @@ from misc import Vector
 from typing import Optional
 import pyautogui
 
-from input_methods.input_method import DataSource
+from input_methods.input_method import InputMethod
 
 import logging
 
 
-class MouseDataSource(DataSource):
+class MouseInputMethod(InputMethod):
 
     def __init__(self, root_window):
         self.logger = logging.getLogger(self.__class__.__name__)

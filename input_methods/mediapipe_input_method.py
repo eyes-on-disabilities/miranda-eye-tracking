@@ -1,13 +1,13 @@
 from typing import Optional
 
 from input_methods.clients.mediapipe_client import MediaPipeClient
-from input_methods.input_method import DataSource
+from input_methods.input_method import InputMethod
 from misc import Vector
 
 import logging
 
 
-class MediaPipeDataSource(DataSource):
+class MediaPipeInputMethod(InputMethod):
     def __init__(self, root_window):
         self.logger = logging.getLogger(self.__class__.__name__)
         self.mediapipe = MediaPipeClient(root_window)

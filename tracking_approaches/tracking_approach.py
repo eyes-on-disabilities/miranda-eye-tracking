@@ -10,8 +10,8 @@ class TrackingApproach(ABC):
     """An approach of how tracking shall be done, e.g. the user looks at the screen
     directly, or the user looks at a control board which 'steers' the mouse cursor.
 
-    Technically speaking, the TrackingApproach takes a vector – likely from a
-    DataSource – and translates it to some MouseMovement action.
+    Technically speaking, the TrackingApproach takes a vector – likely from an
+    InputMethod – and translates it to some MouseMovement action.
 
     Before the TrackingApproach can be used it needs to be calibrated. For guiding
     a calibration, a list of CalibrationInstructions are provided.
