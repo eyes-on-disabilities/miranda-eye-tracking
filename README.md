@@ -2,6 +2,8 @@
 
 ![Two applications running. One is AITrack, which tracks the head position and rotation. The other is Miranda, receiving the data and calibrating it against the screen.](assets/README_hero.png)
 
+![lol](assets/rotating_earth.gif)
+
 Miranda is a toolkit for calibrating eye- and head-tracker inputs to match your screen gaze. It enables seamless integration with other applications, allowing you to use your calibrated tracker data in various ways.
 
 For example, you can use Opentrack as an input source, calibrate your head rotation to your screen, and output the data as UDP messages. This enables you to control applications like OptiKey with your head movements.
