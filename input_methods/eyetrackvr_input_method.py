@@ -22,7 +22,6 @@ class EyeTrackVRDataSource(DataSource):
         self.logger.info("stopped")
 
     def get_next_vector(self) -> Optional[Vector]:
-        x, y = self.eyetrackvr.get_last_data()
-        next_vector = (x, y) if x and y else None
+        next_vector = self.eyetrackvr.get_last_data()
         self.logger.debug(f"next_vector: {next_vector}")
         return next_vector

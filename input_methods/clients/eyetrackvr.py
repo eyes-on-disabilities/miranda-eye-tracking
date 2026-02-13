@@ -1,4 +1,5 @@
 import threading
+import time
 
 from pythonosc.dispatcher import Dispatcher
 from pythonosc.osc_server import BlockingOSCUDPServer
@@ -16,6 +17,7 @@ class EyeTrackVR:
 
         self.last_x = None
         self.last_y = None
+        self._last_update_time = None
 
     def start(self):
         self.thread = threading.Thread(target=self._serve)
@@ -28,11 +30,21 @@ class EyeTrackVR:
             self.thread.join(timeout=1)
 
     def get_last_data(self):
+        if self._last_update_time is None:
+            return None
+
+        if time.time() - self._last_update_time > self.timeout:
+            self.last_x = None
+            self.last_y = None
+            self._last_update_time = None
+            return None
+
         return (self.last_x, self.last_y)
 
     def _update_data(self, new_x: float, new_y: float):
         self.last_x = new_x
         self.last_y = new_y
+        self._last_update_time = time.time()
 
     def _serve(self):
         self.osc_server.serve_forever(self.timeout)
