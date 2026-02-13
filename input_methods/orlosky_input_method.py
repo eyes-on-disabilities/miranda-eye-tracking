@@ -1,6 +1,6 @@
 from typing import Optional
 
-from input_methods.clients.orlosky import Orlosky
+from input_methods.clients.orlosky_client import OrloskyClient
 from input_methods.input_method import DataSource
 from misc import Vector
 
@@ -10,7 +10,7 @@ import logging
 class OrloskyDataSource(DataSource):
     def __init__(self, root_window):
         self.logger = logging.getLogger(self.__class__.__name__)
-        self.orlosky = Orlosky()
+        self.orlosky = OrloskyClient()
         self.logger.info("initialized")
 
     def start(self):

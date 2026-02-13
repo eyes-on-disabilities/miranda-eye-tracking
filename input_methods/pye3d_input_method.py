@@ -1,6 +1,6 @@
 from typing import Optional
 
-from input_methods.clients.pye3d_lib import EyeTracker
+from input_methods.clients.pye3d_client import Pye3DClient
 from input_methods.input_method import DataSource
 from misc import Vector
 
@@ -10,7 +10,7 @@ import logging
 class Pye3dDataSource(DataSource):
     def __init__(self, root_window):
         self.logger = logging.getLogger(self.__class__.__name__)
-        self.pye3d = EyeTracker(root_window)
+        self.pye3d = Pye3DClient(root_window)
         self.logger.info("initialized")
 
     def start(self):

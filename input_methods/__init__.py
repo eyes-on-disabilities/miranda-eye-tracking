@@ -13,7 +13,6 @@ from input_methods.pye3d_input_method import Pye3dDataSource
 from guis.tkinter.main_menu_window import MainMenuOption
 from misc import resource_path
 from input_methods.eyetrackvr_input_method import EyeTrackVRDataSource
-from input_methods.opentrack_and_pupil_input_method import OpentrackAndPupilDataSource
 
 input_methods: dict[MainMenuOption] = {
     "mouse": MainMenuOption(

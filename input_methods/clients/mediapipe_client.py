@@ -17,7 +17,7 @@ COLOR_VIOLET = (134, 42, 161)
 COLOR_YELLOW = (0, 237, 254)
 
 
-class HeadTracker:
+class MediaPipeClient:
     @staticmethod
     def detect_cameras(max_cams=10):
         available_cameras = []

@@ -1,6 +1,6 @@
 from typing import Optional
 
-from input_methods.clients.mediapipe_lib import HeadTracker
+from input_methods.clients.mediapipe_client import MediaPipeClient
 from input_methods.input_method import DataSource
 from misc import Vector
 
@@ -10,7 +10,7 @@ import logging
 class MediaPipeDataSource(DataSource):
     def __init__(self, root_window):
         self.logger = logging.getLogger(self.__class__.__name__)
-        self.mediapipe = HeadTracker(root_window)
+        self.mediapipe = MediaPipeClient(root_window)
         self.logger.info("initialized")
 
     def start(self):

@@ -6,7 +6,7 @@ import msgpack
 import zmq
 
 
-class Pupil:
+class PupilClient:
     def __init__(self, ip="127.0.0.1", port=50020, timeout=0.3):
         self.ip = ip
         self.port = port

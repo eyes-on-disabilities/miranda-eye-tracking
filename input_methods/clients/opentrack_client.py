@@ -2,7 +2,7 @@ import socket
 import struct
 
 
-class Opentrack:
+class OpentrackClient:
     def __init__(self, ip="127.0.0.1", port=4242, socket_timeout=0.1):
         self.socket = None
         self.last_data = None

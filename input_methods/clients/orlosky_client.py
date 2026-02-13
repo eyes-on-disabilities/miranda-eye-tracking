@@ -5,7 +5,7 @@ import tkinter.filedialog as fd
 from typing import Dict, Optional
 
 
-class Orlosky:
+class OrloskyClient:
     def __init__(self):
         self._data_lock = threading.Lock()
         self._latest_data: Optional[Dict[str, float]] = None

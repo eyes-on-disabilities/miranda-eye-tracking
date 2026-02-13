@@ -2,7 +2,7 @@ from typing import Optional
 
 from input_methods.input_method import DataSource
 from misc import Vector
-from input_methods.clients.eyetrackvr import EyeTrackVR
+from input_methods.clients.eyetrackvr_client import EyeTrackVRClient
 
 import logging
 
@@ -10,7 +10,7 @@ import logging
 class EyeTrackVRDataSource(DataSource):
     def __init__(self, root_window):
         self.logger = logging.getLogger(self.__class__.__name__)
-        self.eyetrackvr = EyeTrackVR()
+        self.eyetrackvr = EyeTrackVRClient()
         self.logger.info("initialized")
 
     def start(self):

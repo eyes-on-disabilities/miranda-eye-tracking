@@ -14,7 +14,7 @@ COLOR_VIOLET = (134, 42, 161)
 COLOR_YELLOW = (0, 237, 254)
 
 
-class EyeTracker:
+class Pye3DClient:
     @staticmethod
     def detect_cameras(max_cams=10):
         available_cameras = []

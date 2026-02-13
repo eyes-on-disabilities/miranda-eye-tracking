@@ -1,6 +1,6 @@
 from typing import Optional
 
-from input_methods.clients.pupil import Pupil
+from input_methods.clients.pupil_client import PupilClient
 from input_methods.input_method import DataSource
 from misc import Vector
 
@@ -10,7 +10,7 @@ import logging
 class PupilDataSource(DataSource):
     def __init__(self, root_window):
         self.logger = logging.getLogger(self.__class__.__name__)
-        self.pupil = Pupil()
+        self.pupil = PupilClient()
         self.logger.info("initialized")
 
     def start(self):

@@ -5,7 +5,7 @@ from pythonosc.dispatcher import Dispatcher
 from pythonosc.osc_server import BlockingOSCUDPServer
 
 
-class EyeTrackVR:
+class EyeTrackVRClient:
     def __init__(self, ip="127.0.0.1", port=9000, timeout=0.3):
         self.ip = ip
         self.port = port
