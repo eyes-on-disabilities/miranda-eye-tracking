@@ -1,8 +1,6 @@
 # Miranda – The Eye Tracking Toolkit
 
-![Two applications running. One is AITrack, which tracks the head position and rotation. The other is Miranda, receiving the data and calibrating it against the screen.](assets/README_hero.png)
-
-![lol](assets/rotating_earth.gif)
+![The application "Miranda" is shown, which enables an eye to control the mouse cursor movement. Two windows are shown. The left window shows camera footage with a close-up of a moving eye. Colored circles are drawn by the application around the eye and the pupil and indicate that the eye is tracked. The right window shows settings on how the eye movement shall be tracked and what shall be done with that movement. The "input" setting shows "Eye-Tracking Glasses", and the "output" setting shows "Mouse Movement". A mouse cursor moves around matchin the movement of the eye.](assets/README_hero.gif)
 
 Miranda is a toolkit for calibrating eye- and head-tracker inputs to match your screen gaze. It enables seamless integration with other applications, allowing you to use your calibrated tracker data in various ways.
 
