@@ -38,14 +38,6 @@ input_methods: dict[MainMenuOption] = {
         icon=resource_path("assets/input_method_webcam-head-tracking.png"),
         clazz=MediaPipeDataSource,
     ),
-    "orlosky": MainMenuOption(
-        key="orlosky",
-        title="Orlosky",
-        description="The 3DEyeTracker from Jason Orlosky.\n" +
-                    "**Requires an external application to work.**",
-        icon=resource_path("assets/input_method_orlosky.png"),
-        clazz=OrloskyDataSource,
-    ),
     "opentrack": MainMenuOption(
         key="opentrack",
         title="OpenTrack",
@@ -69,5 +61,13 @@ input_methods: dict[MainMenuOption] = {
                     "**Requires an external application to work.**",
         icon=resource_path("assets/input_method_eyetrackvr.png"),
         clazz=EyeTrackVRDataSource,
+    ),
+    "orlosky": MainMenuOption(
+        key="orlosky",
+        title="Orlosky",
+        description="The 3DEyeTracker from Jason Orlosky.\n" +
+                    "**Requires an external application to work.**",
+        icon=resource_path("assets/input_method_orlosky.png"),
+        clazz=OrloskyDataSource,
     ),
 }
