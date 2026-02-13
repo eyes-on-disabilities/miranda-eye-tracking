@@ -62,53 +62,18 @@ This application uses Open Source components. You can find the source code of th
 
 ### Libraries
 
-#### [MediaPipe](https://ai.google.dev/edge/mediapipe)
-* Copyright (c) The MediaPipe Authors
-* [Apache License 2.0](https://github.com/google-ai-edge/mediapipe/blob/master/LICENSE)
-
-#### [msgpack](https://msgpack.org/)
-* Copyright (C) 2008-2011 INADA Naoki
-* [Apache License 2.0](https://github.com/msgpack/msgpack-python/blob/main/COPYING)
-
-#### [NumPy](https://numpy.org/)
-* Copyright (c) 2005-2025 NumPy Developers
-* [BSD 3-Clause License](https://github.com/numpy/numpy/blob/main/LICENSE.txt)
-
-#### [opencv-python](https://pypi.org/project/opencv-python/)
-* Copyright (c) Olli-Pekka Heinisuo
-* [MIT License](https://github.com/opencv/opencv-python/blob/master/LICENSE.txt)
-
-#### [pupil-detectors](https://github.com/pupil-labs/pupil-detectors)
-* Copyright (c) Pupil Labs
-* [LGPL-3.0 License](https://github.com/pupil-labs/pupil-detectors/blob/master/COPYING.LESSER)
-* [GPL-3.0 License](https://github.com/pupil-labs/pupil-detectors/blob/master/COPYING)
-
-#### [PyAutoGUI](https://github.com/asweigart/pyautogui)
-* Copyright (c) 2014 Al Sweigart
-* [BSD 3-Clause License](https://github.com/asweigart/pyautogui/blob/master/LICENSE.txt)
-
-#### [pye3d](https://github.com/pupil-labs/pye3d-detector)
-* Copyright (c) Pupil Labs
-* [LGPL-3.0 License](https://github.com/pupil-labs/pye3d-detector/blob/master/LICENSE)
-
-#### [python-osc](https://github.com/attwad/python-osc)
-* Copyright (c) python-osc contributors
-* [The Unlicense](https://github.com/attwad/python-osc/blob/main/LICENSE.txt)
-
-#### [pyttsx3](https://github.com/nateshmbhat/pyttsx3)
-* Copyright (c) nateshmbhat and contributors
-* [Mozilla Public License 2.0](https://github.com/nateshmbhat/pyttsx3/blob/master/LICENSE)
-
-#### [screeninfo](https://github.com/rr-/screeninfo)
-* Copyright (c) Marcin Kurczewski
-* [MIT License](https://github.com/rr-/screeninfo/blob/master/LICENSE.md)
-
-#### [PyZMQ](https://github.com/zeromq/pyzmq)
-* Copyright (c) Brian E. Granger & Min Ragan-Kelley
-* [BSD 3-Clause License](https://github.com/zeromq/pyzmq/blob/main/LICENSE.md)
+* [MediaPipe](https://ai.google.dev/edge/mediapipe), Copyright (c) The MediaPipe Authors, [Apache License 2.0](https://github.com/google-ai-edge/mediapipe/blob/master/LICENSE)
+* [msgpack](https://msgpack.org/), Copyright (C) 2008-2011 INADA Naoki, [Apache License 2.0](https://github.com/msgpack/msgpack-python/blob/main/COPYING)
+* [NumPy](https://numpy.org/), Copyright (c) 2005-2025 NumPy Developers, [BSD 3-Clause License](https://github.com/numpy/numpy/blob/main/LICENSE.txt)
+* [opencv-python](https://pypi.org/project/opencv-python/), Copyright (c) Olli-Pekka Heinisuo, [MIT License](https://github.com/opencv/opencv-python/blob/master/LICENSE.txt)
+* [pupil-detectors](https://github.com/pupil-labs/pupil-detectors), Copyright (c) Pupil Labs, [LGPL-3.0 License](https://github.com/pupil-labs/pupil-detectors/blob/master/COPYING.LESSER) and [GPL-3.0 License](https://github.com/pupil-labs/pupil-detectors/blob/master/COPYING)
+* [PyAutoGUI](https://github.com/asweigart/pyautogui), Copyright (c) 2014 Al Sweigart, [BSD 3-Clause License](https://github.com/asweigart/pyautogui/blob/master/LICENSE.txt)
+* [pye3d](https://github.com/pupil-labs/pye3d-detector), Copyright (c) Pupil Labs, [LGPL-3.0 License](https://github.com/pupil-labs/pye3d-detector/blob/master/LICENSE)
+* [python-osc](https://github.com/attwad/python-osc), Copyright (c) python-osc contributors, [The Unlicense](https://github.com/attwad/python-osc/blob/main/LICENSE.txt)
+* [pyttsx3](https://github.com/nateshmbhat/pyttsx3), Copyright (c) nateshmbhat and contributors, [Mozilla Public License 2.0](https://github.com/nateshmbhat/pyttsx3/blob/master/LICENSE)
+* [screeninfo](https://github.com/rr-/screeninfo), Copyright (c) Marcin Kurczewski, [MIT License](https://github.com/rr-/screeninfo/blob/master/LICENSE.md)
+* [PyZMQ](https://github.com/zeromq/pyzmq), Copyright (c) Brian E. Granger & Min Ragan-Kelley, [BSD 3-Clause License](https://github.com/zeromq/pyzmq/blob/main/LICENSE.md)
 
 ### Others
 
-#### [EyeTracker](https://github.com/JEOresearch/EyeTracker)
-* Copyright (c) 2024 JEOresearch
-* [MIT License](https://github.com/JEOresearch/EyeTracker/blob/main/LICENSE)
+* [EyeTracker](https://github.com/JEOresearch/EyeTracker), Copyright (c) 2024 JEOresearch, [MIT License](https://github.com/JEOresearch/EyeTracker/blob/main/LICENSE)
