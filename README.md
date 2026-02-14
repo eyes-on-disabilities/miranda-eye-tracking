@@ -2,9 +2,9 @@
 
 ![The application "Miranda" is shown, which enables an eye to control the mouse cursor movement. Two windows are shown. The left window shows camera footage with a close-up of a moving eye. Colored circles are drawn by the application around the eye and the pupil and indicate that the eye is tracked. The right window shows settings on how the eye movement shall be tracked and what shall be done with that movement. The "input" setting shows "Eye-Tracking Glasses", and the "output" setting shows "Mouse Movement". A mouse cursor moves around matchin the movement of the eye.](assets/README_hero.gif)
 
-Miranda is a toolkit for calibrating eye- and head-tracker inputs to match your screen gaze. It enables seamless integration with other applications, allowing you to use your calibrated tracker data in various ways.
+Miranda is a toolkit for calibrating eye- and head-tracker inputs to match your screen gaze. It enables integration with other applications, allowing you to use your calibrated tracker data in various ways.
 
-For example, you can use Opentrack as an input source, calibrate your head rotation to your screen, and output the data as UDP messages. This enables you to control applications like OptiKey with your head movements.
+For example, you can use live camera footage of your eye as an input, calibrate your eye movements to your screen, and then move the mouse cursor to the point you are looking at, or publish the position via UDP for further use.
 
 > [!NOTE]  
 > This software is early in development. Expect things to not work. We're very happy for your feedback and support!
@@ -37,24 +37,45 @@ pip install PyInstaller
 PyInstaller .\Miranda.spec
 ```
 
-## Concepts
+## How it works
 
-In short, an _input method_ provides eye-tracking data, this data will be translated into screen coordinates using a _tracking approach_, and these coordinates will be used or publishes using an _output method_. Every input method and tracking approach combination needs a calibration first.
+There are three components: _inputs_, _tracking approaches_, and _outputs_.
+An _input_ provides eye-tracking data. This data is translated into screen coordinates using a _tracking approach_, and these coordinates are then used or published through an _output_. Each input and tracking approach combination requires prior calibration.
 
-### Input Method
-An _input method_ is where eye- and head-tracking data comes from. The data could be the yaw and pitch rotation of your eyes in degrees. An input method may be an integrated functionality of Miranda, or may be an external application that needs to run alongside Miranda. Since the data itself gives no indication of where the user is looking at we need a _tracking approach_.
+### Inputs
+An _input_ is where eye- and head-tracking data comes from. The data could be the yaw and pitch rotation of your eyes in degrees. An input may be an integrated eye-tracking functionality of Miranda, or may be an external application that needs to run alongside Miranda. Since the data itself gives no indication of where the user is looking at we need a _tracking approach_.
+
+The inputs are:
+
+* Integrated Inputs:
+  * **Mouse Position**: The mouse position as input. Great for testing.
+  * **Eye-Tracking Glasses**: Eye-Tracking using "Eye-Tracking glasses" with an infrared camera in front of the eye.
+  * **Webcam Head-Tracking**: Head-Tracking with just using a Webcam.
+* Inputs requiring an external application:
+  * [OpenTrack](https://github.com/opentrack/opentrack): The rotation of your head with OpenTrack.
+  * [Pupil](https://docs.pupil-labs.com/core/): Pupil Lab's 3d-eye detection.
+  * [EyeTrackVR](https://docs.eyetrackvr.dev/): Eye tracking with EyeTrackVR.
+  * [Orlosky](https://github.com/JEOresearch/EyeTracker/tree/main): The 3DEyeTracker from Jason Orlosky.
 
 ### Tracking Approach
-A _tracking approach_ tells how the data from an input method shall be translated into screen coordinates – a position on the screen, e.g. where a mouse cursor could move to. There are two approaches:
+A _tracking approach_ tells how the data from an input method shall be translated into screen coordinates – a position on the screen, e.g. where a mouse cursor could move to.
 
-- **Gaze on Screen**: The user is directly looking at the screen. The eye movement directly translates to a screen position. This is the most straight-forward approach.
-- **D-Pad**: This approach is a good alternative if your input is not accurate enough for the _Gaze on Screen_ approach. Usually, a D-pad is a flat, typically thumb-operated, directional control. Likewise with this approach the current screen coordinates is steered by looking at a d-pad. E.g. by looking at the "up" arrow, the screen coordinates moves up.
+There are two approaches:
+
+* **Gaze on Screen**: The user is directly looking at the screen. The eye movement directly translates to a screen position. This is the most straight-forward approach.
+* **D-Pad**: This approach is a good alternative if your input is not accurate enough for the _Gaze on Screen_ approach. Usually, a D-pad is a flat, typically thumb-operated, directional control. Likewise with this approach the current screen coordinates is steered by looking at a d-pad. E.g. by looking at the "up" arrow, the screen coordinates moves up.
 
 ### Calibration
 Before we can translate the data from the input method into screen coordinates, we need to do a calibration first. Every input method and tracking approach combination needs its own calibration. Once such a calibration is done the result will be stored and is available on the next start of Miranda.
 
-### Output Methods
-_Output methods_ take the screen coordinates created by the tracking approach and make use of them. Such a method could simply push the coordinates via UDP, like with the _UDP-Publisher_. Or it could be a whole tool, like a TTS keyboard.
+### Outputs
+_Outputs_ take the screen coordinates created by the tracking approach and make use of them.
+
+The outputs are:
+
+* **UDP-Export**: Publish the gaze results over UDP in a simple JSON format.
+* **Mouse Movement**: Moves the mouse cursor according to the gaze.
+* **TTS Keyboard**: A text-to-speech-keyboard. (Proove-of-concept)
 
 ## Open Source License Attribution
 

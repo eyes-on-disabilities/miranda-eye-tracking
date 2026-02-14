@@ -15,14 +15,14 @@ output_methods: dict[MainMenuOption] = {
     "mouse": MainMenuOption(
         key="mouse",
         title="Mouse Movement",
-        description="Moves the mouse cursor according to the gaze.\nDoesn't work with the Mouse input method.",
+        description="Moves the mouse cursor according to the gaze.\nDoesn't work with the Mouse input.",
         icon=resource_path("assets/output_method_mouse.png"),
         clazz=MouseOutputMethod,
     ),
     "tts-keyboard": MainMenuOption(
         key="tts-keyboard",
         title="TTS Keyboard",
-        description="A text-to-speech-keyboard.",
+        description="A text-to-speech-keyboard.\n(Proove-of-concept)",
         icon=resource_path("assets/output_method_tts-keyboard.png"),
         clazz=TtsKeyboardOutputMethod,
     ),

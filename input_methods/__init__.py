@@ -25,7 +25,7 @@ input_methods: dict[MainMenuOption] = {
     "eye-tracking-glasses": MainMenuOption(
         key="eye-tracking-glasses",
         title="Eye-Tracking Glasses",
-        description="Eye-Tracking using Eye-Tracking glasses\n" +
+        description="Eye-Tracking using \"Eye-Tracking glasses\"\n" +
                     "with an infrared camera in front of the eye.",
         icon=resource_path("assets/input_method_eye-tracking-glasses.png"),
         clazz=Pye3dInputMethod,
