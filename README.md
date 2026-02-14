@@ -26,16 +26,17 @@ pip install -r requirements.txt
 python main.py
 ```
 
-Alternatively, you may also use [uv](https://docs.astral.sh/uv/getting-started/installation/) to run Miranda:
+Alternatively, you may also use [uv](https://docs.astral.sh/uv/getting-started/installation/):
 ```
-uv run --with-requirements requirements.txt main.py [miranda args]
+uv run --with-requirements requirements.txt main.py
 ```
 
-## Build .exe on Windows
+## Build Miranda
 ```
 pip install PyInstaller
 PyInstaller .\Miranda.spec
 ```
+This was tested on _Manjaro 26.0.2_, _Ubuntu 24.04 LTS_, _Windows 10_ and _11_.
 
 ## How it works
 
