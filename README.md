@@ -11,9 +11,14 @@ For example, you can use live camera footage of your eye as an input, calibrate 
 
 ## Prerequisites for Linux
 
-On Linux systems, install [espeak-ng](https://github.com/espeak-ng/espeak-ng):
-```
-apt install espeak-ng
+On Linux systems, ensure the following system packages are installed:
+```sh
+sudo apt install \
+  espeak-ng \
+  libeigen3-dev \
+  libopencv-dev \
+  python3-dev \
+  python3-tk
 ```
 This is not needed for Windows.
 
